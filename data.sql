@@ -44,7 +44,7 @@ CREATE TABLE food (
 );
 
 INSERT INTO admin_account (id, username, pass) VALUES
-('51900147', 'admin', '123456789');
+('51900147', 'admin', '$2a$12$W2.bMpn35X9w/uQpeDWnkOVIYVnYYzpya5r1ySc5AoGOkjj353mcO');
 
 ALTER TABLE admin_account
   ADD PRIMARY KEY (id);

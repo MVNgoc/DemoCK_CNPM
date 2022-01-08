@@ -2,18 +2,22 @@
 
 	#  https://www.w3schools.com/php/php_mysql_select.asp
  
+    // $host = '127.0.0.1'; // tên mysql server
+    // $user = 'root';
+    // $pass = '';
+    // $db = 'restaurant'; // tên databse
     // $conn = new mysqli($host, $user, $pass, $db);
     // $conn->set_charset("utf8");
     // if ($conn->connect_error) {
     //     die('Không thể kết nối database: ' . $conn->connect_error);
     // }
-	// echo "";
+	// echo "success";
 
     function open_database() {
-        $host = 'mysql-server'; // tên mysql server
+        $host = '127.0.0.1'; // tên mysql server
         $user = 'root';
-        $pass = 'root';
-        $db = 'user'; // tên databse
+        $pass = '';
+        $db = 'restaurant'; // tên databse
 
         $cont = new mysqli($host, $user, $pass, $db);
         if($cont -> connect_error) {
@@ -23,7 +27,7 @@
     }
 
 	function login($user, $pass) {
-		$sql = "SELECT * FROM account WHERE username = ?";
+		$sql = "SELECT * FROM user WHERE email = ?";
         $conn = open_database();
 
         $stm = $conn->prepare($sql);
@@ -45,9 +49,34 @@
             return array('code' => 2, 'error' => 'Sai mật khẩu'); 
         }
         else {
-            return array('code' => 0, 'error' => '', 'data' => $data, 'positionid' => $data['positionid'], 'id' => $data['id'], 'sex' => $data['sex'],
-            'firstname' => $data['firstname'], 'lastname' => $data['lastname'], 'department_name' => $data['department_name'], 
-            'email' => $data['email'], 'phone_number' => $data['phone_number'], 'avatar' => $data['avatar'] , 'day_off' => $data['day_off']);
+            return array('code' => 0, 'error' => '', 'data' => $data);
+        }
+	}
+
+    function loginadmin($user, $pass) {
+		$sql = "SELECT * FROM admin_account WHERE username = ?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $user);
+        if(!$stm->execute()) {
+            return null;
+        }
+
+        $result = $stm->get_result();
+
+        if($result->num_rows == 0) {
+            return array('code' => 1, 'error' => 'Tài khoản không tồn tại'); // khong co user ton tai
+        }
+
+        $data = $result->fetch_assoc();
+
+        $hashed_password = $data['pass'];   
+        if(!password_verify($pass, $hashed_password)) {
+            return array('code' => 2, 'error' => 'Sai mật khẩu'); 
+        }
+        else {
+            return array('code' => 0, 'error' => '', 'data' => $data);
         }
 	}
 
