@@ -8,7 +8,7 @@
 
 	if(isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
 		$user = $_COOKIE['username'];
-    	$pass = $_COOKIE['password'];
+    $pass = $_COOKIE['password'];
 	}
 	else {
 		$user = '';
@@ -32,7 +32,7 @@
 			exit();
         }
         else {
-            $admin_data = loginadmin($user, $pass);
+            $admin_data = loginAdmin($user, $pass);
             if($admin_data['code'] == 0) {
                 if(isset($_POST['remember'])) {
 					//set cookie for 1 day
