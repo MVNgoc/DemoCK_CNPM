@@ -1,0 +1,6 @@
+- tất cả các file css để trong 1 thư mục duy nhất là thư mục css
+- tất cả các file hình ảnh để trong 1 thư mục duy nhất là thư mục images
+- tài khoản của admin và người dùng được chia làm hai bảng khác nhau trên database
+- tất cả các hàm xử lý nhập xuất dữ liệu từ database được viết phần lớn ở file db.php nằm trong thư mục admin
+- Tên của các hàm trong file db.php được đặc theo quy chuẩn chữ đầu viết thường chữ sau viết hoa vd addCategory,selectAllCategory,....
+- các chức năng quản lý của admin được để trong thư mục admin

@@ -53,7 +53,7 @@
         }
 	}
 
-    function loginadmin($user, $pass) {
+    function loginAdmin($user, $pass) {
 		$sql = "SELECT * FROM admin_account WHERE username = ?";
         $conn = open_database();
 
@@ -80,20 +80,20 @@
         }
 	}
 
-    function changepass($cfpass, $user) {
-        $hash = password_hash($cfpass, PASSWORD_BCRYPT);
-        $sql = "UPDATE account SET pass = ? WHERE username = ?";
-        $conn = open_database();
+    // function changeass($cfpass, $user) {
+    //     $hash = password_hash($cfpass, PASSWORD_BCRYPT);
+    //     $sql = "UPDATE account SET pass = ? WHERE username = ?";
+    //     $conn = open_database();
 
-        $stm = $conn->prepare($sql);
-        $stm->bind_param('ss',$hash , $user);
+    //     $stm = $conn->prepare($sql);
+    //     $stm->bind_param('ss',$hash , $user);
 
-        if(!$stm->execute()) {
-            return array('code' => 2, 'error' => 'Can not execute command.');
-        }
+    //     if(!$stm->execute()) {
+    //         return array('code' => 2, 'error' => 'Can not execute command.');
+    //     }
 
-        return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
-    }
+    //     return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
+    // }
 
     function register($email, $pass, $username, $phone, $address){
 
@@ -112,13 +112,13 @@
         return array('code' => 0,'error' => 'Success');
     }
 
-    function addCategory($title, $img_name, $featured) {
-        $sql = 'INSERT INTO category (title, img_name, featured) VALUES (?, ?, ?)';
+    function addCategory($title, $featured) {
+        $sql = 'INSERT INTO category (title, featured) VALUES (?, ?)';
 
         $conn = open_database();
 
         $stm = $conn->prepare($sql);
-        $stm->bind_param('sss',$title, $img_name, $featured);
+        $stm->bind_param('ss',$title, $featured);
 
         if(!$stm->execute()){
             return array('code' => 2, 'error' => 'Can not excute command');
@@ -126,8 +126,8 @@
         return array('code' => 0,'error' => 'Success');
     }   
 
-    function selectAllCategory() {
-        $sql = 'SELECT id, title, img_name FROM category';
+    function selectAllCategory($user) {
+        $sql = 'SELECT id, title, img_name, featured FROM category';
 
         $conn = open_database();
         $result = $conn-> query($sql);
@@ -135,24 +135,30 @@
         if($result->num_rows >0){
             foreach($result as $row) {
                     echo '<div class="box-3 float-container">
-                            <img src="images/'.$row['img_name'].'" alt="Pizza" class="img-responsive img-curve">
+                            <img src="images/'.$row['img_name'].'" alt="'.$row['featured'].'" class="img-responsive img-curve">
             
                             <h3 class="float-text text-white">'.$row['title'].'</h3>
-            
-                            <div  class="btn-list float-text">
-                                <button class="view-icon" value="'. $row["id"] .'">
+
+                            <div  class="btn-list float-text" style="display:flex;">';
+                            echo '<form action="foods.php"  method="POST">';
+                            echo '<button style="margin-right: 4px;" class="view-icon" name="view-icon" value="'. $row["id"] .'">
                                     <i class="fa fa-eye"></i>
-                                </button>
-            
-                                <button class="fix-icon" value="'. $row["id"] .'">
-                                    <i class="fa fa-wrench"></i>
-                                </button>
-            
-                                <button class="delete-icon" value="'. $row["id"] .'">
-                                    <i class="fa fa-trash"></i>
-                                </button> 
+                                </button>';
+                                echo '</form>';
+                                echo '<form action="categories.php" method="POST">';
+                                if($user == 'admin') {
+                                echo ' <button class="fix-icon" value="'. $row["id"] .'">
+                                            <i class="fa fa-wrench"></i>
+                                        </button>
+                    
+                                        <button class="delete-icon" name="delete-icon" value="'. $row["id"] .'">
+                                            <i class="fa fa-trash"></i> 
+                                        </button> ';
+                                }
+                             echo '
                             </div>         
                         </div>';
+                    echo '</form>';
             }
         }
         $conn->close();

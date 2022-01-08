@@ -1,10 +1,11 @@
 <?php
-    require_once('./admin/db.php'); 
     session_start();
     if (!isset($_SESSION['username'])) {
         header('Location: login.php');
         exit();
     }
+
+    require_once('./admin/db.php'); 
 
     $user = $_SESSION['username'];
 
@@ -13,19 +14,42 @@
     $categoryfood_decription = '';
     $categoryfood_picture = '';
 
-    if(isset($_POST['btn-submit-categoty'])) {
+    if(isset($_POST['btn-submit-categoty'])) {  
         $categoryfood_name = $_POST['categoryfood_name'];
         $categoryfood_decription = $_POST['categoryfood_decription'];
-        $categoryfood_picture = $_POST['categoryfood_picture'];
-        if(!empty($categoryfood_name) && !empty($categoryfood_decription) && !empty($categoryfood_picture)) {
-            $_POST['categoryfood_name'] = '';
-            $_POST['categoryfood_decription'] = '';
-            $_POST['categoryfood_picture'] = '';
-            $data = addCategory($categoryfood_name, $categoryfood_picture, $categoryfood_decription);
-            if($data['code'] != 0) {
+
+        if(!empty($categoryfood_name) && !empty($categoryfood_decription)) {
+            // echo "<pre>", print_r($_FILES['categoryfood_picture']['name']) ,"</pre>";
+
+            $data = addCategory($categoryfood_name, $categoryfood_decription);
+            $profileImageName = time() . '_' . $_FILES['categoryfood_picture']['name'];
+
+            $targer = 'images/' . $profileImageName;
+            if(move_uploaded_file($_FILES['categoryfood_picture']['tmp_name'], $targer)) {
+                $sql = "UPDATE category SET img_name = '$profileImageName' WHERE title = '$categoryfood_name'";
+                $conn = open_database();
+                $stm = $conn->prepare($sql);
+                $stm->execute();
+            } 
+            else {
+                $error = "Thêm món không thành công.";
+            }
+            if($data['code'] == 0) {
+                
+            }
+            else {
                 $error = 'Có lỗi xảy ra vui lòng thử lại sau';
             }
-        }
+        }     
+    }
+
+    if(isset($_POST['delete-icon'])) {
+        $id = $_POST['delete-icon'];
+
+        $sql = "DELETE FROM category WHERE id = '$id'";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->execute();
     }
 ?>
 
@@ -131,7 +155,7 @@
             </div>
 
             <?php
-                selectAllCategory();
+                selectAllCategory($user);
             ?>
 
             <div class="clearfix"></div>
@@ -165,27 +189,27 @@
         </div>
     </section>
     <!-- footer Section Ends Here -->
-
-    <div class='add-category-food'>
-        <form action="" method="POST" class='add-category-food-form'>
-            <i class="fa fa-close exit-icon"></i>
-            <div class="input-form">
-                <label class="categoryfood_lable" for="categoryfood_name">Tên loại món:</label>
-                <input required="" type="text" class="categoryfood_name" name="categoryfood_name" placeholder="Tên loại món">
-
-                <label class="categoryfood_lable" for="categoryfood_decription">Một vài mô tả:</label>
-                <input required="" type="text" class="categoryfood_decription" name="categoryfood_decription" placeholder="Mô tả">
-
-                <label class="categoryfood_lable" for="categoryfood_picture">Chọn hình ảnh:</label>
-                <input required="" type="file" class="categoryfood_picture" name="categoryfood_picture">
-            </div>
-            <div>
-                <button class="btn-submit-categoty" name="btn-submit-categoty">
-                    Thêm
-                </button>
-            </div>
-        </form>
-    </div>
+        
+    <div class="add-category-food">
+            <form action="" method="POST" class="add-category-food-form" enctype="multipart/form-data">
+                <i class="fa fa-close exit-icon"></i>
+                <div class="input-form">
+                    <label class="categoryfood_lable" for="categoryfood_name">Tên loại món:</label>
+                    <input required="" type="text" class="categoryfood_name" name="categoryfood_name" placeholder="Tên loại món">
+    
+                    <label class="categoryfood_lable" for="categoryfood_decription">Một vài mô tả:</label>
+                    <input required="" type="text" class="categoryfood_decription" name="categoryfood_decription" placeholder="Mô tả">
+    
+                    <label class="categoryfood_lable" for="categoryfood_picture">Chọn hình ảnh:</label>
+                    <input required="" type="file" class="categoryfood_picture" name="categoryfood_picture">
+                </div>
+                <div>
+                    <button class="btn-submit-categoty" name="btn-submit-categoty">
+                        Thêm
+                    </button>
+                </div>
+            </form>
+        </div>
 
 </body>
 <script>
@@ -210,6 +234,12 @@
        exit_icon.on('click', function() {
         add_category_food.toggleClass('open');
        })
+
+    //    var xhttp = new XMLHttpRequest();
+
+    //    xhttp.open("POST", "demo_post2.asp", true);
+    //     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    //     xhttp.send("fname=Henry&lname=Ford");
     })
 
 </script>
