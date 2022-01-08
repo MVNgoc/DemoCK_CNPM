@@ -1,13 +1,20 @@
 <?php
     // kiểm tra nếu đã đăng nhập thì không thể truy cập lại trang login
-	// session_start();
-    // if (isset($_SESSION['username'])) {
-    //     header('Location: index.php');
-    //     exit();
-    // }
+	session_start();
+    if (isset($_SESSION['username'])) {
+        header('Location: index.php');
+        exit();
+    }
+
+	if(isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
+		$user = $_COOKIE['username'];
+    	$pass = $_COOKIE['password'];
+	}
+	else {
+		$user = '';
+		$pass = '';
+	}
     $error = '';
-    $user = '';
-    $pass = '';
     require_once('./admin/db.php'); 
     if(isset($_POST['username']) && isset($_POST['password'])) {
         $user = $_POST['username'];
@@ -15,6 +22,11 @@
 
         $data = login($user, $pass);
         if($data['code'] == 0) {
+            if(isset($_POST['remember'])) {
+                //set cookie for 1 day
+                setcookie('username', $user, time() + 3600 * 24);
+                setcookie('password', $pass, time() + 3600 * 24);
+            }
             $_SESSION['username'] = $user;
             header('Location: index.php');
 			exit();
@@ -22,6 +34,11 @@
         else {
             $admin_data = loginadmin($user, $pass);
             if($admin_data['code'] == 0) {
+                if(isset($_POST['remember'])) {
+					//set cookie for 1 day
+					setcookie('username', $user, time() + 3600 * 24);
+					setcookie('password', $pass, time() + 3600 * 24);
+				}
                 $_SESSION['username'] = $user;
                 header('Location: index.php');
                 exit();
@@ -55,6 +72,9 @@
       <div>
         <input value="<?= $pass ?>" type="password" name="password" placeholder="Mật khẩu" required="" id="password" />
       </div>
+      <div class="row align-items-center remember" style="margin-top:10px; margin-left:36px; font-size: 14px;">
+        <input id="remember" name="remember" type="checkbox">Ghi nhớ đăng nhập
+    </div>
       <div>
         <input type="submit" value="Log in" />
         <a href="signup.php">Register</a>
