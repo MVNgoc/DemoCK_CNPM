@@ -7,6 +7,24 @@
 
     require_once('./admin/db.php'); 
     $user = $_SESSION['username'];
+
+    if(isset($_POST['order-now'])) {
+        $id = $_POST['order-now'];
+        $_SESSION['id_food'] = $id;
+    }
+    else {
+        $id = $_SESSION['id_food'];
+    }
+
+    $sql = "SELECT title, img_food, price FROM food WHERE id = '$id'";
+    $conn = open_database();
+    $stm = $conn -> prepare($sql);
+    $result = $conn-> query($sql);
+    $row = $result->fetch_assoc();
+
+    $food_name = $row['title'];
+    $food_img = $row['img_food'];
+    $food_price = $row['price'];
 ?>
 
 <!DOCTYPE html>
@@ -19,6 +37,8 @@
 
     <!-- Link our CSS file -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -26,7 +46,7 @@
     <section class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="#" title="Logo">
+                <a href="index.php" title="Logo">   
                     <img src="images/4aelogo.png" alt="Restaurant Logo" class="img-responsive">
                 </a>
             </div>
@@ -57,7 +77,7 @@
                                     <a href="categories.php">Quản lý thực đơn</a>
                                 </li>
                                 <li>
-                                    <a href="#">Quản lý tài khoản</a>
+                                    <a href="account.php">Quản lý tài khoản</a>
                                 </li>
                                 <li>
                                     <a href="logout.php">Đăng xuất</a>
@@ -76,42 +96,44 @@
     <section class="food-search">
         <div class="container">
             
-            <h2 class="text-center text-white">Fill this form to confirm your order.</h2>
+            <h2 class="text-center text-white">Điền thông tin để xác nhận đơn đặt hàng của bạn</h2>
 
-            <form action="#" class="order">
+            <form action="" class="order" method="post" >
                 <fieldset>
-                    <legend>Selected Food</legend>
+                    <legend>Thông tin món ăn</legend>
 
                     <div class="food-menu-img">
-                        <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                        <img src="images/<?= $food_img ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
                     </div>
     
                     <div class="food-menu-desc">
-                        <h3>Food Title</h3>
-                        <p class="food-price">$2.3</p>
+                        <h3><?= $food_name ?></h3>
+                        <p id="donGia" style="display: none"> <?= $food_price?></p>
+                        <p class="food-price" name="food-price" id="food-price"><?= $food_price?> VNĐ</p>
+   
 
-                        <div class="order-label">Quantity</div>
-                        <input type="number" name="qty" class="input-responsive" value="1" required>
-                        
+                        <div class="order-label">Số lượng</div>
+                        <input type="number" id="qty" name="qty" min="1" max="100" class="input-responsive food_number" onchange="calculate()" value="1" required>
+                    
                     </div>
 
                 </fieldset>
                 
                 <fieldset>
-                    <legend>Delivery Details</legend>
-                    <div class="order-label">Full Name</div>
-                    <input type="text" name="full-name" placeholder="E.g. Vijay Thapa" class="input-responsive" required>
+                    <legend>Thông tin chi tiết</legend>
+                    <div class="order-label">Họ và tên</div>
+                    <input type="text" name="full-name" placeholder="Họ và tên" class="input-responsive" required>
 
-                    <div class="order-label">Phone Number</div>
-                    <input type="tel" name="contact" placeholder="E.g. 9843xxxxxx" class="input-responsive" required>
+                    <div class="order-label">Số điện thoại</div>
+                    <input type="tel" name="contact" placeholder="Số điện thoại" class="input-responsive" required>
 
-                    <div class="order-label">Email</div>
-                    <input type="email" name="email" placeholder="E.g. hi@vijaythapa.com" class="input-responsive" required>
+                    <div class="order-label">Địa chỉ email</div>
+                    <input type="email" name="email" placeholder="Địa chỉ email" class="input-responsive" required>
 
-                    <div class="order-label">Address</div>
-                    <textarea name="address" rows="10" placeholder="E.g. Street, City, Country" class="input-responsive" required></textarea>
+                    <div class="order-label">Địa chỉ nhận hàng</div>
+                    <textarea name="address" rows="10" placeholder="Địa chỉ nhận hàng" class="input-responsive" required></textarea>
 
-                    <input type="submit" name="submit" value="Confirm Order" class="btn btn-primary">
+                    <input type="submit" name="submit" value="Đặt hàng" class="btn btn-primary">
                 </fieldset>
 
             </form>
@@ -147,4 +169,15 @@
     <!-- footer Section Ends Here -->
 
 </body>
+<script>
+    function calculate() {
+        var price = document.getElementById('donGia').innerHTML;
+        var number = document.getElementById('qty').value;
+
+        var total = price* number;
+
+        document.getElementById('food-price').innerHTML = total + " VNĐ";
+        return (total);
+    }
+</script>
 </html>

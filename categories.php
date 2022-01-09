@@ -239,15 +239,6 @@
        exit_icon.on('click', function() {
             add_category_food.toggleClass('open');
        })
-       
-       fix_icon.on('click', function() {
-            // var xhttp = new XMLHttpRequest();
-
-            // xhttp.open("POST", "categories.php", true);
-            // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            // xhttp.send("id_categories=phoga");
-
-       })
     })
 
 </script>

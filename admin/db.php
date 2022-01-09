@@ -210,7 +210,7 @@
 
         if($result->num_rows >0){
             foreach($result as $row) {
-                echo '<form action="foods.php" method="post">
+                echo '
                 <div class="food-menu-box">
                     <div class="food-menu-img">
                         <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
@@ -224,18 +224,21 @@
                         </p>
                         <br>';
                         if($user != "admin") {
-                            echo '<a value="'. $row["id"] .'" href="order.php" class="btn btn-primary">Đặt ngay</a>';
+                            echo '<form action="order.php" method="post">
+                                    <button value="'. $row["id"] .'" href="order.php" class="btn btn-primary" name="order-now">Đặt ngay</button>
+                                </form>';
                         }
                 echo '   </div>';
                 if($user == "admin") {
-                    echo '<div class="btn-list">
-                    <button value="'. $row["id"] .'" type="submit" style="margin-right: 4px;" id="fix-food-icon" class="fix-food-icon" name="fix-food-icon" >
-                        <i class="fa fa-wrench"></i>
-                    </button>
-                    <button value="'. $row["id"] .'" type="submit" class="delete-food-icon" name="delete-food-icon" >
-                        <i class="fa fa-trash"></i> 
-                    </button>
-                </div>';
+                    echo '<form action="foods.php" method="post">
+                        <div class="btn-list">
+                        <button value="'. $row["id"] .'" type="submit" style="margin-right: 4px;" id="fix-food-icon" class="fix-food-icon" name="fix-food-icon" >
+                            <i class="fa fa-wrench"></i>
+                        </button>
+                        <button value="'. $row["id"] .'" type="submit" class="delete-food-icon" name="delete-food-icon" >
+                            <i class="fa fa-trash"></i> 
+                        </button>
+                    </div>';
                 }   
                     
             echo '</div>
@@ -254,21 +257,23 @@
 
         if($result->num_rows >0){
             foreach($result as $row) {
-                echo '<div class="food-menu-box">
-                        <div class="food-menu-img">
-                            <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
-                        </div>
+                echo '<form action="order.php" method="post">
+                        <div class="food-menu-box">
+                                <div class="food-menu-img">
+                                    <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
+                                </div>
 
-                        <div class="food-menu-desc">
-                            <h4>'.$row['title'].'</h4>
-                            <p class="food-price">'.$row['price'].' VND</p>
-                            <p class="food-detail">
-                                '.$row['description_food'].'
-                            </p>
-                            <br>
-                            <a href="order.php" class="btn btn-primary" value="'. $row["id"] .'">Đặt ngay</a>
-                        </div>
-                    </div>';
+                                <div class="food-menu-desc">
+                                    <h4>'.$row['title'].'</h4>
+                                    <p class="food-price">'.$row['price'].' VND</p>
+                                    <p class="food-detail">
+                                        '.$row['description_food'].'
+                                    </p>
+                                    <br>
+                                    <button type="submit" href="order.php" class="btn btn-primary" value="'. $row["id"] .'" name="order-now">Đặt ngay</button>                              
+                                </div>
+                            </div>
+                    </form>';
             }
         }
         $conn->close();
@@ -308,3 +313,4 @@
         }
         $conn->close();
     }
+?>  
