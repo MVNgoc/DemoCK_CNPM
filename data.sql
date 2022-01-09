@@ -86,7 +86,7 @@ INSERT INTO food (id,title, img_food, description_food, price, category_name) VA
 ('24','Lòng già xào nghệ', 'Lòng già xào nghệ.jpeg', 'Món ăn rất hợp để ăn lai rai', '35000', 'Xào'),
 ('25','Pizza Hải Sản Xốt Pesto', 'Pizza Hải Sản Xốt Pesto.jpg', 'Ngon và dễ ăn', '129000', 'Fastfood'),
 ('26','Pizza Thập Cẩm', 'Pizza Thập Cẩm.jpg', 'Mang Hương Vị Truyền Thống Với ThịT Bò, Thịt Xông Khói', '129000', 'Fastfood'),
-('27','Mì Ý Bò Bằm Xốt Cà Chua', 'Mì Ý Bò Bằm Xốt Cà Chua.jpg', '120000', 'Mì Ý Xốt Cà Chua Với Thịt Bò', 'Fastfood'),
+('27','Mì Ý Bò Bằm Xốt Cà Chua', 'Mì Ý Bò Bằm Xốt Cà Chua.jpg', 'Mì Ý Xốt Cà Chua Với Thịt Bò', '120000', 'Fastfood'),
 ('28','Mì Ý Hải Sản Xốt Cà Chua', 'Mì Ý Hải Sản Xốt Cà Chua.jpg', 'Mì Ý Xốt Cà Chua Với Tôm, Mực, Hành Tây Và Ớt Chuông Xanh', '130000', 'Fastfood'),
 ('29','Bánh Mì Bơ Tỏi', 'Bánh Mì Bơ Tỏi.jpg', 'Bánh Mì Bơ Tỏi Nướng Giòn Ngon Phủ Xốt Bơ Tỏi Thơm Nồng', '29000', 'Fastfood'),
 ('30','Xà Lách Trộn Cá Ngừ Và Thịt Xông Khói', 'Xà Lách Trộn Cá Ngừ Và Thịt Xông Khói.jpg', 'Rau Xanh Trộn Với Cá Ngừ,...', '79000', 'Fastfood');
