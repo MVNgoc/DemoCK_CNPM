@@ -137,7 +137,7 @@
                     if (!empty($error)) {
                         echo "<div class='alert alert-danger'>$error</div>";
                     }
-                ?>
+                ?>  
             </div>
             <?php
                 if($user == 'admin') {
@@ -189,7 +189,7 @@
     <!-- footer Section Starts Here -->
     <section class="footer">
         <div class="container text-center">
-            <p><a href="#">51900147 51900200 51900145</a></p>
+            <p><a href="#">51900147 51900200 51900145 51900067</a></p>
         </div>
     </section>
     <!-- footer Section Ends Here -->

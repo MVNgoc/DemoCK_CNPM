@@ -21,6 +21,34 @@
         $stm = $conn->prepare($sql);
         $stm->execute();
     }
+
+    if(isset($_POST['btn-submit-user'])) {
+        if(isset($_POST['user_name']) && isset($_POST['user_email']) && isset($_POST['user_pass']) && isset($_POST['user_cfpass'])
+        && isset($_POST['user_phone']) && isset($_POST['user_address'])) {
+            $user_name = $_POST['user_name'];
+            $user_email = $_POST['user_email'];
+            $user_pass = $_POST['user_pass'];
+            $user_cfpass = $_POST['user_cfpass'];
+            $user_phone = $_POST['user_phone'];
+            $user_address = $_POST['user_address'];
+
+            if(strlen($user_pass) < 6) {
+                $error = 'Mật khẩu phải có ít nhất 6 kí tự';
+            }
+            else if($user_cfpass != $user_pass) {
+                $error = 'Mật khẩu xác nhận không đúng';
+            }
+            else {
+                $data = register($user_email, $user_cfpass, $user_name, $user_phone, $user_address);
+                if($data['code'] == 0) {
+                    //do nothing
+                }
+                else {
+                    $error = 'Có lỗi xảy ra vui lòng thử lại sau';
+                }
+            }
+        }   
+    }
     
 ?>
 
@@ -33,7 +61,9 @@
     <title>Restaurant Website</title>
 
     <!-- Link our CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/categories.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -92,6 +122,21 @@
         <div class="container">
             <h2 class="text-center">Danh sách tài khoản người dùng</h2>
 
+            <div id="errorMessage" class="errorMessage my-3">
+                <?php 
+                    if (!empty($error)) {
+                        echo "<div class='alert alert-danger'>$error</div>";
+                    }
+                ?>
+            </div>
+
+            <div class="addcategori" style="margin-top:5%; margin-left:2%; margin-bottom:2%">
+                <button type="submit" class="icon-btn add-btn" >
+                    <div class="add-icon"></div>
+                    <div class="btn-txt" >Thêm tài khoản</div>
+                </button>
+            </div>
+
             <?php
                 selectAllUserAccount();
             ?>
@@ -99,4 +144,85 @@
             <div class="clearfix"></div>
         </div>
     </section>
+
+    <section class="social">    
+        <div class="container text-center">
+            <ul>
+                <li>
+                    <a href="#"><img src="https://img.icons8.com/fluent/50/000000/facebook-new.png"/></a>
+                </li>
+                <li>
+                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/instagram-new.png"/></a>
+                </li>
+                <li>
+                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/twitter.png"/></a>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <!-- social Section Ends Here -->
+
+    <!-- footer Section Starts Here -->
+    <section class="footer">
+        <div class="container text-center">
+            <p><a href="#">51900147 51900200 51900145 51900067</a></p>
+        </div>
+    </section>
+
+    <div class="add-user-account">
+        <form action="" method="POST" class="add-user-form" enctype="multipart/form-data">
+            <i class="fa fa-close exit-icon"></i>
+            <div class="input-form">
+                <label class="user_lable" for="user_name">Họ và tên:</label>
+                <input required="" type="text" class="user_name" name="user_name" placeholder="Họ và tên">
+
+                <label class="user_lable" for="user_email">Email:</label>
+                <input required="" type="text" class="user_email" name="user_email" placeholder="Email">
+
+                <label class="user_lable" for="user_pass">Mật khẩu:</label>
+                <input required="" type="password" class="user_pass" name="user_pass" placeholder="Mật khẩu (ít nhất 6 kí tự)">
+
+                <label class="user_lable" for="user_cfpass">Nhập lại mật khẩu:</label>
+                <input required="" type="password" class="user_cfpass" name="user_cfpass" placeholder="Nhập lại mật khẩu">
+
+                <label class="user_lable" for="user_phone">Số điện thoại:</label>
+                <input required="" type="tel" class="user_phone" name="user_phone" placeholder="Số điện thoại">
+
+                <label class="user_lable" for="user_address">Địa chỉ:</label>
+                <input required="" type="text" class="user_address" name="user_address" placeholder="Địa chỉ">
+            </div>
+            <div>
+                <button class="btn-submit-user" name="btn-submit-user">
+                    Thêm
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script>
+    $(document).ready(() => {
+       const add_btn = $('.add-btn');
+       const add_user_account = $('.add-user-account');
+       const add_user_form = $('.add-user-form');
+       const exit_icon = $('.exit-icon');
+
+       add_btn.on('click', function() {
+            add_user_account.toggleClass('open');
+       })
+
+       add_user_account.on('click', function() {
+            add_user_account.toggleClass('open');
+       })
+
+       add_user_form.on('click', function(event) {
+           event.stopPropagation();
+       })
+
+       exit_icon.on('click', function() {
+            add_user_account.toggleClass('open');
+       })
+    });
+</script>
+
 </html>
