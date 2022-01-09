@@ -1,13 +1,14 @@
 <?php
-    require_once('./admin/db.php'); 
     session_start();
     if (!isset($_SESSION['username'])) {
-        header('Location: login.php');
+        header('Location: ../login.php');
         exit();
     }
 
+    require_once('./admin/db.php'); 
     $user = $_SESSION['username'];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +30,13 @@
                     <img src="images/4aelogo.png" alt="Restaurant Logo" class="img-responsive">
                 </a>
             </div>
+
             <?php
                 if($user != "admin") {
                     echo '<div class="menu text-right">
                             <ul>
                                 <li>
-                                    <a href="#">Trang chủ</a>
+                                    <a href="index.php">Trang chủ</a>
                                 </li>
                                 <li>
                                     <a href="categories.php">Thực đơn</a>
@@ -55,7 +57,7 @@
                                     <a href="categories.php">Quản lý thực đơn</a>
                                 </li>
                                 <li>
-                                    <a href="./admin/account.php">Quản lý tài khoản</a>
+                                    <a href="#">Quản lý tài khoản</a>
                                 </li>
                                 <li>
                                     <a href="logout.php">Đăng xuất</a>
@@ -64,7 +66,6 @@
                         </div>';
                 }
             ?>
-            
 
             <div class="clearfix"></div>
         </div>
@@ -72,49 +73,52 @@
     <!-- Navbar Section Ends Here -->
 
     <!-- fOOD sEARCH Section Starts Here -->
-    <section class="food-search text-center">
+    <section class="food-search">
         <div class="container">
             
-            <form action="food-search.html" method="POST">
-                <input type="search" name="search" placeholder="Search for Food.." required>
-                <input type="submit" name="submit" value="Search" class="btn btn-primary">
+            <h2 class="text-center text-white">Fill this form to confirm your order.</h2>
+
+            <form action="#" class="order">
+                <fieldset>
+                    <legend>Selected Food</legend>
+
+                    <div class="food-menu-img">
+                        <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                    </div>
+    
+                    <div class="food-menu-desc">
+                        <h3>Food Title</h3>
+                        <p class="food-price">$2.3</p>
+
+                        <div class="order-label">Quantity</div>
+                        <input type="number" name="qty" class="input-responsive" value="1" required>
+                        
+                    </div>
+
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Delivery Details</legend>
+                    <div class="order-label">Full Name</div>
+                    <input type="text" name="full-name" placeholder="E.g. Vijay Thapa" class="input-responsive" required>
+
+                    <div class="order-label">Phone Number</div>
+                    <input type="tel" name="contact" placeholder="E.g. 9843xxxxxx" class="input-responsive" required>
+
+                    <div class="order-label">Email</div>
+                    <input type="email" name="email" placeholder="E.g. hi@vijaythapa.com" class="input-responsive" required>
+
+                    <div class="order-label">Address</div>
+                    <textarea name="address" rows="10" placeholder="E.g. Street, City, Country" class="input-responsive" required></textarea>
+
+                    <input type="submit" name="submit" value="Confirm Order" class="btn btn-primary">
+                </fieldset>
+
             </form>
 
         </div>
     </section>
     <!-- fOOD sEARCH Section Ends Here -->
-
-    <!-- CAtegories Section Starts Here -->
-    <section class="categories">
-        <div class="container">
-            <h2 class="text-center">Các loại món</h2>
-
-            <?php
-                selectAllCategoryHome();
-            ?>
-
-            <div class="clearfix"></div>
-        </div>
-    </section>
-    <!-- Categories Section Ends Here -->
-
-    <!-- fOOD MEnu Section Starts Here -->
-    <section class="food-menu">
-        <div class="container">
-            <h2 class="text-center">Danh sách tất cả các món</h2>
-
-            <?php 
-                selectAllFoodHome();
-            ?>
-
-            <div class="clearfix"></div>
-        </div>
-
-        <p class="text-center">
-            <a href="categories.php">Đến trang thực đơn</a>
-        </p>
-    </section>
-    <!-- fOOD Menu Section Ends Here -->
 
     <!-- social Section Starts Here -->
     <section class="social">
@@ -137,7 +141,7 @@
     <!-- footer Section Starts Here -->
     <section class="footer">
         <div class="container text-center">
-            <p><a href="#">51900147 51900200 51900145</a></p>
+            <p>All rights reserved. Designed By <a href="#">Vijay Thapa</a></p>
         </div>
     </section>
     <!-- footer Section Ends Here -->

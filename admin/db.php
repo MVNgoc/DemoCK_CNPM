@@ -135,23 +135,22 @@
         if($result->num_rows >0){
             foreach($result as $row) {
                     echo '<div class="box-3 float-container">
-                            <img src="images/'.$row['img_name'].'" alt="'.$row['featured'].'" class="img-responsive img-curve">
+                            <img src="images/'.$row['img_name'].'" alt="'.$row['featured'].'" class="img-responsive img-curve img-categories">
             
                             <h3 class="float-text text-white">'.$row['title'].'</h3>
 
                             <div  class="btn-list float-text" style="display:flex;">';
                             echo '<form action="foods.php"  method="POST">';
-                            echo '<button style="margin-right: 4px;" class="view-icon" name="view-icon" value="'. $row["id"] .'">
+                            echo '<button style="margin-right: 4px;" class="view-icon" name="view-icon" value="'. $row["title"] .'">
                                     <i class="fa fa-eye"></i>
                                 </button>';
                                 echo '</form>';
-                                echo '<form action="categories.php" method="POST">';
                                 if($user == 'admin') {
-                                echo ' <button class="fix-icon" value="'. $row["id"] .'">
+                                echo ' <button style="margin-right: 4px;" id="fix-icon" class="fix-icon" name="fix-icon" value="'. $row["id"] .'">
                                             <i class="fa fa-wrench"></i>
-                                        </button>
-                    
-                                        <button class="delete-icon" name="delete-icon" value="'. $row["id"] .'">
+                                        </button>';
+                                        echo '<form action="categories.php" method="POST">';
+                                echo      ' <button class="delete-icon" name="delete-icon" value="'. $row["id"] .'">
                                             <i class="fa fa-trash"></i> 
                                         </button> ';
                                 }
@@ -164,4 +163,148 @@
         $conn->close();
     }
 
+    function selectAllCategoryHome() {
+        $sql = 'SELECT id, title, img_name, featured FROM category';
+
+        $conn = open_database();
+        $result = $conn-> query($sql);
+
+        if($result->num_rows >0){
+            foreach($result as $row) {
+                    echo '<div class="box-3 float-container">
+                            <img src="images/'.$row['img_name'].'" alt="Pizza" class="img-responsive img-curve">
+            
+                            <h3 class="float-text text-white">'.$row['title'].'</h3>
+                        </div>';
+            }
+        }
+        $conn->close();
+    }
+
+    function addFood($title, $description_food, $price, $category_name) {
+        $sql = 'INSERT INTO food (title, description_food, price, category_name) VALUES (?, ?, ?, ?)';
+
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssis',$title, $description_food, $price, $category_name);
+
+        if(!$stm->execute()){
+            return array('code' => 2, 'error' => 'Can not excute command');
+        }
+        return array('code' => 0,'error' => 'Success');
+    } 
+
+    function selectAllFood($user, $category_name) {
+        $sql = 'SELECT id, title, img_food, description_food, price FROM food WHERE category_name = ?';
+
+        $conn = open_database();
+        
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s',$category_name);
+        if(!$stm->execute()){
+            die('Query error: ' . $stm->error);
+        }
+        
+        $result = $stm->get_result();
+
+        if($result->num_rows >0){
+            foreach($result as $row) {
+                echo '<form action="foods.php" method="post">
+                <div class="food-menu-box">
+                    <div class="food-menu-img">
+                        <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
+                    </div>
     
+                    <div class="food-menu-desc">
+                        <h4>'.$row['title'].'</h4>
+                        <p class="food-price">'.$row['price'].' VND</p>
+                        <p class="food-detail">
+                            '.$row['description_food'].'
+                        </p>
+                        <br>';
+                        if($user != "admin") {
+                            echo '<a value="'. $row["id"] .'" href="order.php" class="btn btn-primary">Đặt ngay</a>';
+                        }
+                echo '   </div>';
+                if($user == "admin") {
+                    echo '<div class="btn-list">
+                    <button value="'. $row["id"] .'" type="submit" style="margin-right: 4px;" id="fix-food-icon" class="fix-food-icon" name="fix-food-icon" >
+                        <i class="fa fa-wrench"></i>
+                    </button>
+                    <button value="'. $row["id"] .'" type="submit" class="delete-food-icon" name="delete-food-icon" >
+                        <i class="fa fa-trash"></i> 
+                    </button>
+                </div>';
+                }   
+                    
+            echo '</div>
+            </form>';
+            }
+        }
+        $conn->close();
+    }
+
+    function selectAllFoodHome() {
+        $sql = 'SELECT id, title, img_food, description_food, price FROM food';
+
+        $conn = open_database();
+        
+        $result = $conn-> query($sql);
+
+        if($result->num_rows >0){
+            foreach($result as $row) {
+                echo '<div class="food-menu-box">
+                        <div class="food-menu-img">
+                            <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
+                        </div>
+
+                        <div class="food-menu-desc">
+                            <h4>'.$row['title'].'</h4>
+                            <p class="food-price">'.$row['price'].' VND</p>
+                            <p class="food-detail">
+                                '.$row['description_food'].'
+                            </p>
+                            <br>
+                            <a href="order.php" class="btn btn-primary" value="'. $row["id"] .'">Đặt ngay</a>
+                        </div>
+                    </div>';
+            }
+        }
+        $conn->close();
+    }
+
+    function selectAllUserAccount() {
+        $sql = 'SELECT id, email, username, phone_number, user_address FROM user';
+
+        $conn = open_database();
+        
+        $result = $conn-> query($sql);
+        $stt = 1;
+        if($result->num_rows >0){
+            foreach($result as $row) {
+                echo '<div class="user_card">
+                        <div class="infor_container">
+                            <div class="info_user"><span style="font-weight:bold">'.$stt.'</span></div>
+                            <div class="info_user"><span style="font-weight:bold">Tên:</span> '.$row['username'].'</div>
+                            <div class="info_user"><span style="font-weight:bold">Email:</span> '.$row['email'].'</div>
+                            <div class="info_user"> <span style="font-weight:bold">Số điện thoại:</span> '.$row['phone_number'].'</div>
+                            <div class="info_user"> <span style="font-weight:bold">Địa chỉ:</span> '.$row['phone_number'].'</div>
+                        </div>';
+                
+                    echo  '<form method="post" action="account.php">
+                                <div class="btn_container">
+                                    <button value="'. $row["id"] .'" class="btn-fix-user" name="btn-fix-user">
+                                        <i class="fa fa-wrench"></i>
+                                    </button>
+                                    <button value="'. $row["id"] .'" class="btn-delete-user" name="btn-delete-user">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>  
+                            </div>
+                        </form>';            
+                $stt++;
+            }
+        }
+        $conn->close();
+    }

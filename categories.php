@@ -79,8 +79,8 @@
     <section class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="#" title="Logo">
-                    <img src="images/3aelogo.png" alt="Restaurant Logo" class="img-responsive">
+                <a href="index.php" title="Logo">
+                    <img src="images/4aelogo.png" alt="Restaurant Logo" class="img-responsive">
                 </a>
             </div>
 
@@ -89,13 +89,13 @@
                     echo '<div class="menu text-right">
                             <ul>
                                 <li>
-                                    <a href="#">Trang chủ</a>
+                                    <a href="index.php">Trang chủ</a>
                                 </li>
                                 <li>
                                     <a href="#">Thực đơn</a>
                                 </li>
                                 <li>
-                                    <a href="#">Liên hệ</a>
+                                    <a href="contact.php">Liên hệ</a>
                                 </li>
                                 <li>
                                     <a  href="logout.php">Đăng xuất</a>
@@ -110,7 +110,7 @@
                                     <a href="#">Quản lý thực đơn</a>
                                 </li>
                                 <li>
-                                    <a href="#">Quản lý tài khoản</a>
+                                    <a href="./admin/account.php">Quản lý tài khoản</a>
                                 </li>
                                 <li>
                                     <a href="logout.php">Đăng xuất</a>
@@ -120,7 +120,7 @@
                 }
             ?>
 
-            <div class="clearfix"></div>
+            <div class="clearfix"></div>  
         </div>
     </section>
     <!-- Navbar Section Ends Here -->
@@ -139,12 +139,16 @@
                     }
                 ?>
             </div>
-            <div class="addcategori" style="margin-top:5%; margin-left:2%; margin-bottom:2%">
-                <button type="submit" class="icon-btn add-btn" >
-                    <div class="add-icon"></div>
-                    <div class="btn-txt" >Thêm loại</div>
-                </button>
-            </div>
+            <?php
+                if($user == 'admin') {
+                    echo '<div class="addcategori" style="margin-top:5%; margin-left:2%; margin-bottom:2%">
+                            <button type="submit" class="icon-btn add-btn" >
+                                <div class="add-icon"></div>
+                                <div class="btn-txt" >Thêm loại</div>
+                            </button>
+                        </div>';
+                }
+            ?>
 
             <div id="errorMessage" class="errorMessage my-3" style="font-size: 20px;margin-left: 18px;font-weight: bold;color: red;">
                 <?php 
@@ -191,25 +195,25 @@
     <!-- footer Section Ends Here -->
         
     <div class="add-category-food">
-            <form action="" method="POST" class="add-category-food-form" enctype="multipart/form-data">
-                <i class="fa fa-close exit-icon"></i>
-                <div class="input-form">
-                    <label class="categoryfood_lable" for="categoryfood_name">Tên loại món:</label>
-                    <input required="" type="text" class="categoryfood_name" name="categoryfood_name" placeholder="Tên loại món">
-    
-                    <label class="categoryfood_lable" for="categoryfood_decription">Một vài mô tả:</label>
-                    <input required="" type="text" class="categoryfood_decription" name="categoryfood_decription" placeholder="Mô tả">
-    
-                    <label class="categoryfood_lable" for="categoryfood_picture">Chọn hình ảnh:</label>
-                    <input required="" type="file" class="categoryfood_picture" name="categoryfood_picture">
-                </div>
-                <div>
-                    <button class="btn-submit-categoty" name="btn-submit-categoty">
-                        Thêm
-                    </button>
-                </div>
-            </form>
-        </div>
+        <form action="" method="POST" class="add-category-food-form" enctype="multipart/form-data">
+            <i class="fa fa-close exit-icon"></i>
+            <div class="input-form">
+                <label class="categoryfood_lable" for="categoryfood_name">Tên loại món:</label>
+                <input required="" type="text" class="categoryfood_name" name="categoryfood_name" placeholder="Tên loại món">
+
+                <label class="categoryfood_lable" for="categoryfood_decription">Một vài mô tả:</label>
+                <input required="" type="text" class="categoryfood_decription" name="categoryfood_decription" placeholder="Mô tả">
+
+                <label class="categoryfood_lable" for="categoryfood_picture">Chọn hình ảnh:</label>
+                <input required="" type="file" class="categoryfood_picture" name="categoryfood_picture">
+            </div>
+            <div>
+                <button class="btn-submit-categoty" name="btn-submit-categoty">
+                    Thêm
+                </button>
+            </div>
+        </form>
+    </div>
 
 </body>
 <script>
@@ -218,13 +222,14 @@
        const add_category_food = $('.add-category-food');
        const add_category_food_form = $('.add-category-food-form');
        const exit_icon = $('.exit-icon');
+       const fix_icon = $('.fix-icon');
 
        add_btn.on('click', function() {
-        add_category_food.toggleClass('open');
+            add_category_food.toggleClass('open');
        })
 
        add_category_food.on('click', function() {
-        add_category_food.toggleClass('open');
+            add_category_food.toggleClass('open');
        })
 
        add_category_food_form.on('click', function(event) {
@@ -232,14 +237,17 @@
        })
 
        exit_icon.on('click', function() {
-        add_category_food.toggleClass('open');
+            add_category_food.toggleClass('open');
        })
+       
+       fix_icon.on('click', function() {
+            // var xhttp = new XMLHttpRequest();
 
-    //    var xhttp = new XMLHttpRequest();
+            // xhttp.open("POST", "categories.php", true);
+            // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // xhttp.send("id_categories=phoga");
 
-    //    xhttp.open("POST", "demo_post2.asp", true);
-    //     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    //     xhttp.send("fname=Henry&lname=Ford");
+       })
     })
 
 </script>

@@ -19,14 +19,14 @@ CREATE TABLE user (
 CREATE TABLE category (
   id varchar(15) NOT NULL,
   title varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  img_name varchar(225) COLLATE utf8_unicode_ci,
+  img_name varchar(225) COLLATE utf8_unicode_ci DEFAULT 'food-placeholder.png',
   featured varchar(225) COLLATE utf8_unicode_ci NOT NULL
 );
 
 CREATE TABLE food_order (
   id varchar(15) NOT NULL,
   food_name varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  img_food varchar(225) COLLATE utf8_unicode_ci,
+  img_food varchar(225) COLLATE utf8_unicode_ci DEFAULT 'food-placeholder.png',
   quantity int(10) NOT NULL,
   username varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   phone_number varchar(15) NOT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE food_order (
 CREATE TABLE food (
   id varchar(15) NOT NULL,
   title varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  img_food varchar(225) COLLATE utf8_unicode_ci,
+  img_food varchar(225) COLLATE utf8_unicode_ci DEFAULT 'food-placeholder.png',
   description_food varchar(225) COLLATE utf8_unicode_ci NOT NULL,
-  price decimal(10,2) NOT NULL,
-  category_id int(10) NOT NULL
+  price int(255) NOT NULL,
+  category_name varchar(64) COLLATE utf8_unicode_ci NOT NULL
 );
 
 INSERT INTO admin_account (id, username, pass) VALUES

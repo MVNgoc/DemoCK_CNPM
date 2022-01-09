@@ -26,8 +26,11 @@ body {
 }
 .img-curve{
     border-radius: 15px;
-    /* height: 300px; */
 }
+
+/* .img-categories {
+    height: 320px;
+} */
 
 .text-right{
     text-align: right;
@@ -90,13 +93,35 @@ h3{
 
 .float-container .btn-list .view-icon,
 .float-container .btn-list .fix-icon,
-.float-container .btn-list .delete-icon {
+.float-container .btn-list .delete-icon,
+.food-menu-box .btn-list .fix-food-icon,
+.food-menu-box .btn-list .delete-food-icon {
     font-size: 22px;
     border-radius: 50%;
     padding: 1px;
     width: 32px;
     background-color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
+}
+
+.float-container .btn-list .view-icon:hover,
+.float-container .btn-list .fix-icon:hover,
+.float-container .btn-list .delete-icon:hover,
+.food-menu-box .btn-list .fix-food-icon:hover,
+.food-menu-box .btn-list .delete-food-icon:hover {
+    opacity: 0.7;
+}  
+
+.food-menu-box .btn-list {
+    margin-top: 110px;
+}
+
+.food-menu-box .btn-list .fix-food-icon {
+    margin-right: 16px !important;
+}
+
+.food-menu-box img {
+    max-height: 100px;
 }
 
 .float-text{
@@ -196,7 +221,7 @@ fieldset{
 }
 
 .food-price{
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin: 2% 0;
 }
 .food-detail{
@@ -291,7 +316,8 @@ fieldset{
 }
 
 /* CSS categories */
-.add-category-food {
+.add-category-food,
+.add-food {
     position: fixed;
     top: 0;
     left: 0;
@@ -303,34 +329,39 @@ fieldset{
     align-items: center;
 }
 
-.add-category-food-form{
-    animation: modalSlipDown linear 0.3s;
-}
-
-.add-category-food .add-category-food-form {
+.add-category-food .add-category-food-form,
+.add-food .add-food-form {
     width: 600px;
     height: auto;
     background-color:#fff;
     border-radius: 15px;
     position: relative;
     padding: 40px 30px;
+    animation: modalSlipDown linear 0.3s;
 }
 
-.add-category-food .exit-icon {
+.add-category-food .exit-icon,
+.add-food .exit-icon {
     position: absolute;
     right: 8px;
     top: 6px;
     font-size: 30px;
 }
 
-.add-category-food .exit-icon:hover {
+.add-category-food .exit-icon:hover,
+.add-food .exit-icon:hover {
     cursor: pointer;
     opacity: 0.7;
 }
 
 .add-category-food .categoryfood_name,
 .add-category-food .categoryfood_picture,
-.add-category-food .categoryfood_decription {
+.add-category-food .categoryfood_decription,
+.add-food .food_name,
+.add-food .food_picture,
+.add-food .food_decription,
+.add-food .food_price,
+.add-food .food_category {
     display: block;
     margin-bottom: 16px;
     margin-top: 6px;
@@ -339,16 +370,22 @@ fieldset{
 }
 
 .add-category-food .categoryfood_name,
-.add-category-food .categoryfood_decription {
+.add-category-food .categoryfood_decription,
+.add-food .food_name,
+.add-food .food_decription,
+.add-food .food_price,
+.add-food .food_category {
     border-radius: 15px;
     padding-left: 6px;
 } 
 
-.add-category-food .categoryfood_decription {
+.add-category-food .categoryfood_decription,
+.add-food .food_decription {
     height: 60px;
 }
 
-.add-category-food .btn-submit-categoty {
+.add-category-food .btn-submit-categoty,
+.add-food .btn-submit-food {
     border: none;
     width: 100px;
     height: 50px;
@@ -360,7 +397,8 @@ fieldset{
     cursor: pointer;
 }
 
-.add-category-food .btn-submit-categoty:hover {
+.add-category-food .btn-submit-categoty:hover,
+.add-food .btn-submit-food:hover {
     opacity: 0.7;
     cursor: pointer;
 }
@@ -379,3 +417,43 @@ fieldset{
 .open { 
     display: flex;
 }
+
+/* CSS account.php */
+.container .user_card {
+    background-color: rgb(235, 235, 235);
+    display: flex;
+    padding: 20px;
+    margin-bottom: 16px;
+    margin-top: 20px;
+    border-radius: 15px;
+    border: 1px solid rgb(160, 160, 160);
+    justify-content: space-between;
+}
+
+.container .infor_container {
+    display: flex;
+    align-items: center;
+}
+
+.container .user_card .info_user {
+    margin-left: 26px;
+}
+
+.user_card .btn-fix-user,
+.user_card .btn-delete-user {
+    font-size: 24px;
+    padding: 4px;
+    margin-left: 6px;
+    border-radius: 14px;
+}
+
+.user_card .btn-fix-user:hover,
+.user_card .btn-delete-user:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.img-responsive {
+    border-radius: 20px;
+}
+/* End CSS account.php */

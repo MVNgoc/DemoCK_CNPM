@@ -1,3 +1,64 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['username'])) {
+        header('Location: login.php');
+        exit();
+    }
+
+
+
+    require_once('./admin/db.php'); 
+
+    $user = $_SESSION['username'];
+
+    if(isset($_POST['view-icon'])) {
+        $category = $_POST['view-icon'];
+        $_SESSION['category'] = $category;
+    }
+    else {
+        $category = $_SESSION['category'] ;
+    }
+
+    if(isset($_POST['btn-submit-food'])) {  
+        $title = $_POST['food_name'];
+        $description_food = $_POST['food_decription'];
+        $price = $_POST['food_price'];
+
+        if(!empty($title) && !empty($description_food) && !empty($price)) {
+            // echo "<pre>", print_r($_FILES['categoryfood_picture']['name']) ,"</pre>";
+
+            $data = addFood($title, $description_food, $price, $category);
+            $profileImageName = time() . '_' . $_FILES['food_picture']['name'];
+
+            $targer = 'images/' . $profileImageName;
+            if(move_uploaded_file($_FILES['food_picture']['tmp_name'], $targer)) {
+                $sql = "UPDATE food SET img_food = '$profileImageName' WHERE title = '$title'";
+                $conn = open_database();
+                $stm = $conn->prepare($sql);
+                $stm->execute();
+            } 
+            else {
+                $error = "Thêm món không thành công.";
+            }
+            if($data['code'] == 0) {
+                
+            }
+            else {
+                $error = 'Có lỗi xảy ra vui lòng thử lại sau';
+            }
+        }     
+    }
+
+    if(isset($_POST['delete-food-icon'])) {
+        $id = $_POST['delete-food-icon'];
+
+        $sql = "DELETE FROM food WHERE id = '$id'";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->execute();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +69,9 @@
 
     <!-- Link our CSS file -->
     <link rel="stylesheet" href="css/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/categories.css">
 </head>
 
 <body>
@@ -15,27 +79,46 @@
     <section class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="#" title="Logo">
-                    <img src="images/logo.png" alt="Restaurant Logo" class="img-responsive">
+                <a href="index.php" title="Logo">
+                    <img src="images/4aelogo.png" alt="Restaurant Logo" class="img-responsive">
                 </a>
             </div>
 
-            <div class="menu text-right">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a href="categories.html">Categories</a>
-                    </li>
-                    <li>
-                        <a href="foods.html">Foods</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                </ul>
-            </div>
+            <?php
+                if($user != "admin") {
+                    echo '<div class="menu text-right">
+                            <ul>
+                                <li>
+                                    <a href="index.php">Trang chủ</a>
+                                </li>
+                                <li>
+                                    <a href="#">Thực đơn</a>
+                                </li>
+                                <li>
+                                    <a href="contact.php">Liên hệ</a>
+                                </li>
+                                <li>
+                                    <a  href="logout.php">Đăng xuất</a>
+                                </li>
+                            </ul>
+                        </div>';
+                }
+                else {
+                    echo '<div class="menu text-right">
+                            <ul>
+                                <li>
+                                    <a href="categories.php">Quản lý thực đơn</a>
+                                </li>
+                                <li>
+                                    <a href="./admin/account.php">Quản lý tài khoản</a>
+                                </li>
+                                <li>
+                                    <a href="logout.php">Đăng xuất</a>
+                                </li>
+                            </ul>
+                        </div>';
+                }
+            ?>
 
             <div class="clearfix"></div>
         </div>
@@ -60,114 +143,59 @@
     <!-- fOOD MEnu Section Starts Here -->
     <section class="food-menu">
         <div class="container">
-            <h2 class="text-center">Food Menu</h2>
+            <h2 class="text-center">Thực đơn</h2>
 
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Food Title</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
+            <div id="errorMessage" class="errorMessage my-3">
+                <?php 
+                    if (!empty($error)) {
+                        echo "<div class='alert alert-danger'>$error</div>";
+                    }
+                ?>
             </div>
 
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-burger.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
-                </div>
+            <?php
+                if($user == 'admin') {
+                    echo '<div class="addcategori" style="margin-top:5%; margin-left:2%; margin-bottom:2%">
+                            <button type="submit" class="icon-btn add-btn" >
+                                <div class="add-icon"></div>
+                                <div class="btn-txt" >Thêm món</div>
+                            </button>
+                        </div>';
+                }
+            ?>
 
-                <div class="food-menu-desc">
-                    <h4>Smoky Burger</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-burger.jpg" alt="Chicke Hawain Burger" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Nice Burger</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Food Title</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Food Title</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-momo.jpg" alt="Chicke Hawain Momo" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Chicken Steam Momo</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
+            <?php
+                selectAllFood($user, $category)
+            ?>
 
             <div class="clearfix"></div>
 
-            
+            <div class="add-food">
+                <form action="" method="POST" class="add-food-form" enctype="multipart/form-data">
+                    <i class="fa fa-close exit-icon"></i>
+                    <div class="input-form">
+                        <label class="food_lable" for="food_name">Tên món:</label>
+                        <input required="" type="text" class="food_name" name="food_name" placeholder="Tên loại món">
+
+                        <label class="food_lable" for="food_decription">Một vài mô tả:</label>
+                        <input required="" type="text" class="food_decription" name="food_decription" placeholder="Mô tả">
+
+                        <label class="food_lable" for="food_picture">Chọn hình ảnh:</label>
+                        <input required="" type="file" class="food_picture" name="food_picture">
+
+                        <label class="food_lable" for="food_price">Giá:</label>
+                        <input required="" type="number" class="food_price" name="food_price" placeholder="Tên loại món">
+
+                        <label class="food_lable" for="food_category">Kiểu món:</label>
+                        <input value="<?= $category ?>" required="" type="text" class="food_category" name="food_category" placeholder="Tên loại món" readonly>
+                    </div>
+                    <div>
+                        <button class="btn-submit-food" name="btn-submit-food">
+                            Thêm
+                        </button>
+                    </div>
+                </form>
+            </div>
 
         </div>
 
@@ -195,10 +223,56 @@
     <!-- footer Section Starts Here -->
     <section class="footer">
         <div class="container text-center">
-            <p>All rights reserved. Designed By <a href="#">Vijay Thapa</a></p>
+            <p><a href="#">51900147 51900200 51900145</a></p>
         </div>
     </section>
     <!-- footer Section Ends Here -->
 
 </body>
+<script>
+    $(document).ready(() => {
+       const add_btn = $('.add-btn');
+       const add_food = $('.add-food');
+       const add_food_form = $('.add-food-form');
+       const exit_icon = $('.exit-icon');
+       const fix_icon = $('.fix-icon');
+        const fix_food_icon = $('.fix-food-icon');
+
+       add_btn.on('click', function() {
+            add_food.toggleClass('open');
+       })
+
+       add_food.on('click', function() {
+            add_food.toggleClass('open');
+       })
+
+       add_food_form.on('click', function(event) {
+           event.stopPropagation();
+       })
+
+       exit_icon.on('click', function() {
+            add_food.toggleClass('open');
+       })
+
+       fix_food_icon.on('click', function(event) {
+           let id = $('#fix-food-icon').val();
+
+           $.ajax({
+                url: 'foods.php',
+                type: 'POST',
+                data: 
+                {
+                    id_food: id
+                },
+                success: function (response) {
+                    console.log('Success');
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            event.preventDefault();
+       });
+    });
+</script>
 </html>

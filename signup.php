@@ -17,13 +17,17 @@
     $tel = $_POST['tel'];
     $address = $_POST['address'];
 
-    if($pass != $cfpass) {
+    if(strlen($pass) < 6) {
+      $error = "Mật khẩu phải có ít nhất 6 kí tự";
+    }
+    else if($pass != $cfpass) {
       $error = "Mật khẩu xác nhận không khớp với mật khẩu vừa nhập";
     }
     else {
       $data = register($email, $pass, $username, $tel, $address);
       if($data['code'] == 0) {
         $error = $data['error'];
+        $_SESSION['username'] = $email;
         header('Location: index.php');
         exit();
       }
