@@ -43,6 +43,32 @@
         }     
     }
 
+    if(isset($_POST['btn-edit-categoty'])) {
+        $categoryfood_name = $_POST['categoryfood_name'];
+        $categoryfood_decription = $_POST['categoryfood_decription'];
+        $categoryfood_id = $_POST['btn-edit-categoty'];
+
+        if(!empty($categoryfood_name) && !empty($categoryfood_decription)) {
+            // echo "<pre>", print_r($_FILES['categoryfood_picture']['name']) ,"</pre>";
+
+            $data = updateCategory($categoryfood_id, $categoryfood_name, $categoryfood_decription);
+
+        }
+        if (!$_FILES['categoryfood_picture']['size'] == 0)
+        {
+            $profileImageName = time() . '_' . $_FILES['categoryfood_picture']['name'];
+
+                $targer = 'images/' . $profileImageName;
+                if(move_uploaded_file($_FILES['categoryfood_picture']['tmp_name'], $targer)) {
+                    $sql = "UPDATE category SET img_name = '$profileImageName' WHERE id =  $categoryfood_id ";
+                    $conn = open_database();
+                    $stm = $conn->prepare($sql);
+                    $stm->execute();
+                }
+
+        }
+    }
+
     if(isset($_POST['delete-icon'])) {
         $id = $_POST['delete-icon'];
 
@@ -98,6 +124,9 @@
                                     <a href="contact.php">Liên hệ</a>
                                 </li>
                                 <li>
+                                    <a  href="changepass.php">Đổi mật khẩu</a>
+                                </li>
+                                <li>
                                     <a  href="logout.php">Đăng xuất</a>
                                 </li>
                             </ul>
@@ -111,6 +140,9 @@
                                 </li>
                                 <li>
                                     <a href="./admin/account.php">Quản lý tài khoản</a>
+                                </li>
+                                <li>
+                                    <a  href="changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
                                     <a href="logout.php">Đăng xuất</a>
@@ -196,7 +228,7 @@
         
     <div class="add-category-food">
         <form action="" method="POST" class="add-category-food-form" enctype="multipart/form-data">
-            <i class="fa fa-close exit-icon"></i>
+            <i class="fa fa-close exit-icon exit-category-food"></i>
             <div class="input-form">
                 <label class="categoryfood_lable" for="categoryfood_name">Tên loại món:</label>
                 <input required="" type="text" class="categoryfood_name" name="categoryfood_name" placeholder="Tên loại món">
@@ -205,11 +237,39 @@
                 <input required="" type="text" class="categoryfood_decription" name="categoryfood_decription" placeholder="Mô tả">
 
                 <label class="categoryfood_lable" for="categoryfood_picture">Chọn hình ảnh:</label>
-                <input required="" type="file" class="categoryfood_picture" name="categoryfood_picture">
+                <input required="" type="file" class="categoryfood_picture" name="categoryfood_picture" style="border:none;">
             </div>
             <div>
                 <button class="btn-submit-categoty" name="btn-submit-categoty">
                     Thêm
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="edit-category-food" id="edit-category-food" >
+        <script>
+            function updateFilename(){
+                var fileInput = document.getElementById('imgCategoryInput');
+                document.getElementById('labelImgName').innerHTML=fileInput? fileInput.files[0].name  : "";
+            }
+        </script>
+        <form action="" method="POST" class="edit-category-food-form" enctype="multipart/form-data" id="formEdit">
+            <i class="fa fa-close exit-icon exitIconEdit"></i>
+            <div class="input-form">
+                <label class="categoryfood_lable" for="categoryfood_name">Tên loại món:</label>
+                <input required="" type="text" class="categoryfood_name" name="categoryfood_name" placeholder="Tên loại món">
+
+                <label class="categoryfood_lable" for="categoryfood_decription">Một vài mô tả:</label>
+                <input required="" type="text" class="categoryfood_decription" name="categoryfood_decription" placeholder="Mô tả">
+
+                <label class="categoryfood_lable" for="categoryfood_picture">Chọn hình ảnh:</label>
+                <input id="imgCategoryInput" onchange="updateFilename()" style="display: none " type="file" class="categoryfood_picture" name="categoryfood_picture" >
+                <label for="imgCategoryInput" class="labelButton">Choose File</label><label style=" font-size: 13px; font-family: Arial, Helvetica, sans-serif;" id="labelImgName"> </label>
+            </div>
+            <div>
+                <button type="submit" form="formEdit" class="btn-submit-categoty" name="btn-edit-categoty">
+                    Lưu
                 </button>
             </div>
         </form>
@@ -221,9 +281,15 @@
        const add_btn = $('.add-btn');
        const add_category_food = $('.add-category-food');
        const add_category_food_form = $('.add-category-food-form');
-       const exit_icon = $('.exit-icon');
-       const fix_icon = $('.fix-icon');
+       const exit_category_food = $('.exit-category-food');
 
+       const edit_category_food = $('.edit-category-food');
+       const edit_category_food_form = $('.edit-category-food-form');
+       const exit_icon_edit = $('.exitIconEdit');
+       const fix_icon = $('.fix-icon');
+       const inputImg = $('.categoryfood_picture');
+
+       //add
        add_btn.on('click', function() {
             add_category_food.toggleClass('open');
        })
@@ -236,9 +302,42 @@
            event.stopPropagation();
        })
 
-       exit_icon.on('click', function() {
+       exit_category_food.on('click', function() {
+            //add_category_food.removeClass('open');
             add_category_food.toggleClass('open');
        })
+
+       //edit
+       edit_category_food.on('click', function() {
+            edit_category_food.toggleClass('open');
+       })
+
+       edit_category_food_form.on('click', function(event) {
+            event.stopPropagation();
+       })
+
+       exit_icon_edit.on('click', function() {
+            edit_category_food.toggleClass('open');
+            console.log('clicked');
+       })
+       
+       fix_icon.on('click', function() {
+            var id = this.value;
+                if(id==""){
+       				document.getElementById("edit-category-food").innerHTML = "";
+       			}else{
+       				var myRequest = new XMLHttpRequest();
+       				myRequest.onreadystatechange = function() {
+       					if (this.readyState == 4 && this.status == 200) {
+       						document.getElementById("edit-category-food").innerHTML = this.responseText;
+        					}
+       				};
+                    myRequest.open("GET","fix-category.php?id="+id,true);
+       				myRequest.send();
+                    edit_category_food.toggleClass('open');
+       			}
+        })
+
     })
 
 </script>
