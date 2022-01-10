@@ -49,7 +49,7 @@
             return array('code' => 2, 'error' => 'Sai mật khẩu'); 
         }
         else {
-            return array('code' => 0, 'error' => '', 'data' => $data);
+            return array('code' => 0, 'error' => '', 'data' => $data, 'id_user' => $data['id']);
         }
 	}
 
@@ -80,20 +80,20 @@
         }
 	}
 
-    // function changeass($cfpass, $user) {
-    //     $hash = password_hash($cfpass, PASSWORD_BCRYPT);
-    //     $sql = "UPDATE account SET pass = ? WHERE username = ?";
-    //     $conn = open_database();
+    function changepass($cfpass, $id) {
+        $hash = password_hash($cfpass, PASSWORD_BCRYPT);
+        $sql = "UPDATE user SET pass = ? WHERE id = ?";
+        $conn = open_database();
 
-    //     $stm = $conn->prepare($sql);
-    //     $stm->bind_param('ss',$hash , $user);
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss',$hash, $id);
 
-    //     if(!$stm->execute()) {
-    //         return array('code' => 2, 'error' => 'Can not execute command.');
-    //     }
+        if(!$stm->execute()) {
+            return array('code' => 2, 'error' => 'Can not execute command.');
+        }
 
-    //     return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
-    // }
+        return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
+    }
 
     function register($email, $pass, $username, $phone, $address){
 
@@ -313,4 +313,33 @@
         }
         $conn->close();
     }
+
+    function createFoodOder($food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price) {
+        $sql = 'INSERT INTO food_order (food_name, img_food, quantity, username, phone_number, email, user_address, total_price)
+                VALUE (?, ?, ?, ?, ?, ?, ?, ?)';
+
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssissssi', $food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price);
+
+        if(!$stm->execute()){
+            return array('code' => 2, 'error' => 'Can not excute command');
+        }
+        return array('code' => 0,'error' => 'Success');
+    }
+
+    function addContact($username, $useremail, $contributions) {
+        $sql = 'INSERT INTO contact (username, useremail, contributions) VALUE (?, ?, ?)';
+
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('sss', $username, $useremail, $contributions);
+
+        if(!$stm->execute()){
+            return array('code' => 2, 'error' => 'Can not excute command');
+        }
+        return array('code' => 0,'error' => 'Success');
+    } 
 ?>  
