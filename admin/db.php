@@ -49,7 +49,7 @@
             return array('code' => 2, 'error' => 'Sai mật khẩu'); 
         }
         else {
-            return array('code' => 0, 'error' => '', 'data' => $data);
+            return array('code' => 0, 'error' => '', 'data' => $data, 'id_user' => $data['id']);
         }
 	}
 
@@ -254,7 +254,7 @@
 
         if($result->num_rows >0){
             foreach($result as $row) {
-                echo '<form action="foods.php" method="post">
+                echo '
                 <div class="food-menu-box">
                     <div class="food-menu-img">
                         <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
@@ -268,11 +268,14 @@
                         </p>
                         <br>';
                         if($user != "admin") {
-                            echo '<a value="'. $row["id"] .'" href="order.php" class="btn btn-primary">Đặt ngay</a>';
+                            echo '<form action="order.php" method="post">
+                            <button name="order-now" value="'. $row["id"] .'" href="order.php" class="btn btn-primary">Đặt ngay</button>
+                            </form>';
                         }
                 echo '   </div>';
                 if($user == "admin") {
-                    echo '<div class="btn-list">
+                    echo '<form action="foods.php" method="post">
+                    <div class="btn-list">
                     <button value="'. $row["id"] .'" type="button" style="margin-right: 4px;" id="fix-food-icon" class="fix-food-icon" name="fix-food-icon" >
                         <i class="fa fa-wrench"></i>
                     </button>
