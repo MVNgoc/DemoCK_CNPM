@@ -351,7 +351,7 @@
                         console.log(this.responseText);
                     }
                 };
-                myRequest.open("GET","fix-food.php?id="+id,true);
+                myRequest.open("GET","./admin/fix-food.php?id="+id,true);
                 myRequest.send();
                 edit_food.addClass('open');
             }

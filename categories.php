@@ -308,9 +308,9 @@
        })
 
        //edit
-       edit_category_food.on('click', function() {
-            edit_category_food.toggleClass('open');
-       })
+    //    edit_category_food.on('click', function() {
+    //         edit_category_food.toggleClass('open');
+    //    })
 
        edit_category_food_form.on('click', function(event) {
             event.stopPropagation();
@@ -332,7 +332,7 @@
        						document.getElementById("edit-category-food").innerHTML = this.responseText;
         					}
        				};
-                    myRequest.open("GET","fix-category.php?id="+id,true);
+                    myRequest.open("GET","./admin/fix-category.php?id="+id,true);
        				myRequest.send();
                     edit_category_food.toggleClass('open');
        			}

@@ -110,7 +110,7 @@
                                     <a href="../contact.php">Liên hệ</a>
                                 </li>
                                 <li>
-                                    <a  href="changepass.php">Đổi mật khẩu</a>
+                                    <a  href="../changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
                                     <a  href="../logout.php">Đăng xuất</a>
@@ -128,7 +128,7 @@
                                     <a href="#">Quản lý tài khoản</a>
                                 </li>
                                 <li>
-                                    <a  href="changepass.php">Đổi mật khẩu</a>
+                                    <a  href="../changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
                                     <a href="../logout.php">Đăng xuất</a>
