@@ -28,6 +28,7 @@
                 setcookie('password', $pass, time() + 3600 * 24);
             }
             $_SESSION['username'] = $user;
+            $_SESSION['id'] = $data['id_user'];
             header('Location: index.php');
 			exit();
         }
@@ -35,11 +36,12 @@
             $admin_data = loginAdmin($user, $pass);
             if($admin_data['code'] == 0) {
                 if(isset($_POST['remember'])) {
-					//set cookie for 1 day
-					setcookie('username', $user, time() + 3600 * 24);
-					setcookie('password', $pass, time() + 3600 * 24);
-				}
+                  //set cookie for 1 day
+                  setcookie('username', $user, time() + 3600 * 24);
+                  setcookie('password', $pass, time() + 3600 * 24);
+                }
                 $_SESSION['username'] = $user;
+                $_SESSION['id'] = $data['id_user'];
                 header('Location: index.php');
                 exit();
             }

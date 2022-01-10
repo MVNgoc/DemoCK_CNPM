@@ -49,6 +49,24 @@
             }
         }   
     }
+
+    if(isset($_POST['btn-edit-user'])) {
+        if(isset($_POST['user_name']) && isset($_POST['user_email']) && isset($_POST['user_phone']) && isset($_POST['user_address'])) {
+            $user_name = $_POST['user_name'];
+            $user_email = $_POST['user_email'];
+            $user_phone = $_POST['user_phone'];
+            $user_address = $_POST['user_address'];
+            $user_id = $_POST['btn-edit-user'];
+
+            $data = updateAccount($user_id, $user_email, $user_name, $user_phone, $user_address);
+            if($data['code'] == 0) {
+                //do nothing
+            }
+            else {
+                $error = 'Có lỗi xảy ra vui lòng thử lại sau';
+            }
+        }
+    }
     
 ?>
 
@@ -92,6 +110,9 @@
                                     <a href="../contact.php">Liên hệ</a>
                                 </li>
                                 <li>
+                                    <a  href="changepass.php">Đổi mật khẩu</a>
+                                </li>
+                                <li>
                                     <a  href="../logout.php">Đăng xuất</a>
                                 </li>
                             </ul>
@@ -105,6 +126,9 @@
                                 </li>
                                 <li>
                                     <a href="#">Quản lý tài khoản</a>
+                                </li>
+                                <li>
+                                    <a  href="changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
                                     <a href="../logout.php">Đăng xuất</a>
@@ -198,6 +222,30 @@
             </div>
         </form>
     </div>
+
+    <div class="edit-user-account" id="edit-user-account">
+        <form action="" method="POST" class="edit-user-form" enctype="multipart/form-data">
+            <i class="fa fa-close exit-icon"></i>
+            <div class="input-form">
+                <label class="user_lable" for="user_name">Họ và tên:</label>
+                <input required="" type="text" class="user_name" name="user_name" placeholder="Họ và tên">
+
+                <label class="user_lable" for="user_email">Email:</label>
+                <input required="" type="text" class="user_email" name="user_email" placeholder="Email">
+
+                <label class="user_lable" for="user_phone">Số điện thoại:</label>
+                <input required="" type="tel" class="user_phone" name="user_phone" placeholder="Số điện thoại">
+
+                <label class="user_lable" for="user_address">Địa chỉ:</label>
+                <input required="" type="text" class="user_address" name="user_address" placeholder="Địa chỉ">
+            </div>
+            <div>
+                <button class="btn-submit-user" name="btn-edit-user">
+                    Lưu
+                </button>
+            </div>
+        </form>
+    </div>
 </body>
 
 <script>
@@ -205,7 +253,10 @@
        const add_btn = $('.add-btn');
        const add_user_account = $('.add-user-account');
        const add_user_form = $('.add-user-form');
+       const edit_user_account = $('.edit-user-account');
+       const edit_user_form = $('.edit-user-form');
        const exit_icon = $('.exit-icon');
+       const fix_icon = $('.btn-fix-user');
 
        add_btn.on('click', function() {
             add_user_account.toggleClass('open');
@@ -221,7 +272,34 @@
 
        exit_icon.on('click', function() {
             add_user_account.toggleClass('open');
+            console.log('clicked');
        })
+
+//       edit_user_account.on('click', function() {
+//             edit_user_account.toggleClass('open');
+//        })
+//
+//        edit_user_form.on('click', function(event) {
+//            event.stopPropagation();
+//        })
+
+       fix_icon.on('click', function() {
+        var id = this.value;
+            if(id==""){
+                document.getElementById("edit-user-account").innerHTML = "";
+            }else{
+                var myRequest = new XMLHttpRequest();
+                myRequest.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("edit-user-account").innerHTML = this.responseText;
+                        console.log(this.responseText);
+                    }
+                };
+                myRequest.open("GET","fix-account.php?id="+id,true);
+                myRequest.send();
+                edit_user_account.addClass('open');
+            }
+        })
     });
 </script>
 

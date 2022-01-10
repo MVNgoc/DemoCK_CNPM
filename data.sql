@@ -31,7 +31,8 @@ CREATE TABLE food_order (
   username varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   phone_number varchar(15) NOT NULL,
   email varchar(64) NOT NULL,
-  user_address varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  user_address varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  total_price int(255) NOT NULL
 );
 
 CREATE TABLE food (
@@ -43,9 +44,18 @@ CREATE TABLE food (
   category_name varchar(64) COLLATE utf8_unicode_ci NOT NULL
 );
 
+CREATE TABLE contact (
+  id varchar(15) NOT NULL,
+  username varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  useremail varchar(225) COLLATE utf8_unicode_ci NOT NULL,
+  contributions varchar(225) COLLATE utf8_unicode_ci NOT NULL
+);
+
+-- pass: 123456
 INSERT INTO admin_account (id, username, pass) VALUES
 ('51900147', 'admin', '$2a$12$iWE1Epee9DVR0idqIriuAus3TkZklYMqEZVX3i2HSne1jeldtYjXO');
 
+-- pass: 123456
 INSERT INTO user (id, email, pass, username, phone_number, user_address) VALUES 
 ('1', 'hungnghia@gmail.com', '$2a$12$ErHOSSX9JOEUWmyT5rnO5OPE1lbJBo.rRQaPC1/h7AU/I90TwlM0S', 'Phạm Hùng Nghĩa', '0312546238', '43/38 Dạ nam'),
 ('2', 'maingoc@gmail.com', '$2a$12$VHBTGe65UvUrF/0NPVPIJuZ9pKbFrK8vAgTUH4/JhUU99aB0SVuFW', 'Mai Văn Ngọc', '0337375401', '231 Lộc Điền, Lộc Ninh'),
@@ -121,4 +131,10 @@ ALTER TABLE food
 ADD PRIMARY KEY (id);
 
 ALTER TABLE food
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=20;
+
+ALTER TABLE contact
+ADD PRIMARY KEY (id);
+
+ALTER TABLE contact
   MODIFY id int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=20;

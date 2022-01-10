@@ -7,6 +7,30 @@
     }
 
     $user = $_SESSION['username'];
+    $id_user = $_SESSION['id'];
+
+    $user_newpass = '';
+    $user_cfnewpass = '';
+
+    if(isset($_POST['submitButton'])) {
+        if(isset($_POST['password']) && isset($_POST['confirmPassword'])) {
+            $user_newpass = $_POST['password'];
+            $user_cfnewpass = $_POST['confirmPassword'];
+           
+            if($user_cfnewpass != $user_newpass) {
+                $error = 'Mật khẩu xác nhân không đúng';
+            }
+            else {
+                $data = changepass($user_cfnewpass, $id_user);
+                if($data['code'] == 0) {
+                    $error = $data['error'];
+                }
+                else {
+                    $error = 'Có lỗi xảy ra vui lòng thử lại sau';
+                }
+            }
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +58,7 @@
                     echo '<div class="menu text-right">
                             <ul>
                                 <li>
-                                    <a href="#">Trang chủ</a>
+                                    <a href="login.php">Trang chủ</a>
                                 </li>
                                 <li>
                                     <a href="categories.php">Thực đơn</a>
@@ -78,49 +102,40 @@
     <!-- Navbar Section Ends Here -->
 
     <!-- fOOD sEARCH Section Starts Here -->
-    <section class="food-search text-center">
-        <div class="container">
-            
-            <form action="food-search.html" method="POST">
-                <input type="search" name="search" placeholder="Search for Food.." required>
-                <input type="submit" name="submit" value="Search" class="btn btn-primary">
+
+    <div class="mainDiv">
+        <div class="cardStyle">
+            <form action="" method="post" name="changePassForm" id="changePassForm">          
+                
+                <h2 class="formTitle">ĐỔI MẬT KHẨU</h2>
+                
+                <div class="inputDiv">
+                    <label class="inputLabel" for="password">Mật khẩu mới</label>
+                    <input value="<?=$user_newpass?>" type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="inputDiv">
+                    <label class="inputLabel" for="confirmPassword">Xác nhận mật khẩu</label>
+                    <input value="<?=$user_cfnewpass?>" type="password" id="confirmPassword" name="confirmPassword">
+                </div>
+
+                <?php
+                    if(!empty($error)) {
+                        echo '<div class="inputDiv">
+                                <div class="error">'.$error.'</div>
+                            </div>';
+                    }
+                ?>
+                
+                <div class="buttonWrapper">
+                    <button type="submit" name="submitButton" id="submitButton" class="submitButton pure-button pure-button-primary">
+                        <span>Xác nhận</span>
+                    </button>
+                </div>
+                
             </form>
-
         </div>
-    </section>
-    <!-- fOOD sEARCH Section Ends Here -->
-
-    <!-- CAtegories Section Starts Here -->
-    <section class="categories">
-        <div class="container">
-            <h2 class="text-center">Các loại món</h2>
-
-            <?php
-                selectAllCategoryHome();
-            ?>
-
-            <div class="clearfix"></div>
-        </div>
-    </section>
-    <!-- Categories Section Ends Here -->
-
-    <!-- fOOD MEnu Section Starts Here -->
-    <section class="food-menu">
-        <div class="container">
-            <h2 class="text-center">Danh sách tất cả các món</h2>
-
-            <?php 
-                selectAllFoodHome();
-            ?>
-
-            <div class="clearfix"></div>
-        </div>
-
-        <p class="text-center">
-            <a href="categories.php">Đến trang thực đơn</a>
-        </p>
-    </section>
-    <!-- fOOD Menu Section Ends Here -->
+    </div>
 
     <!-- social Section Starts Here -->
     <section class="social">

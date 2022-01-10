@@ -1,13 +1,31 @@
 <?php
-    require_once('./admin/db.php'); 
     session_start();
     if (!isset($_SESSION['username'])) {
         header('Location: login.php');
         exit();
     }
 
+    require_once('./admin/db.php'); 
+
     $user = $_SESSION['username'];
+
+    if(isset($_POST['submit'])) {
+        if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['message'])) {
+            $user_name = $_POST['name'];
+            $user_email = $_POST['email'];
+            $user_message = $_POST['message'];
+
+            $data = addContact($user_name, $user_email, $user_message);
+            if($data['code'] == 0) {
+                $error = 'Cám ơn phản hồi của bạn';
+            }
+            else {
+                $error = 'Có lỗi xảy ra';
+            }
+        }
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,30 +35,41 @@
     <title>Restaurant Website</title>
 
     <!-- Link our CSS file -->
-    <link rel="stylesheet" href="css/style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/contact.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
 
 <body>
     <!-- Navbar Section Starts Here -->
     <section class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="#" title="Logo">
+                <a href="index.php" title="Logo">
                     <img src="images/4aelogo.png" alt="Restaurant Logo" class="img-responsive">
                 </a>
             </div>
+
             <?php
                 if($user != "admin") {
                     echo '<div class="menu text-right">
                             <ul>
                                 <li>
-                                    <a href="#">Trang chủ</a>
+                                    <a href="index.php">Trang chủ</a>
                                 </li>
                                 <li>
                                     <a href="categories.php">Thực đơn</a>
                                 </li>
                                 <li>
-                                    <a href="contact.php">Liên hệ</a>
+                                    <a href="#">Liên hệ</a>
                                 </li>
                                 <li>
                                     <a  href="changepass.php">Đổi mật khẩu</a>
@@ -55,7 +84,7 @@
                     echo '<div class="menu text-right">
                             <ul>
                                 <li>
-                                    <a href="categories.php">Quản lý thực đơn</a>
+                                    <a href="#">Quản lý thực đơn</a>
                                 </li>
                                 <li>
                                     <a href="./admin/account.php">Quản lý tài khoản</a>
@@ -70,57 +99,46 @@
                         </div>';
                 }
             ?>
-            
 
-            <div class="clearfix"></div>
+            <div class="clearfix"></div>  
         </div>
     </section>
     <!-- Navbar Section Ends Here -->
+    
+    <header>
+        <?php
+            if(!empty($error)) {
+                echo '<h1>'.$error.'</h1>';
+            }
+            else {
+                echo '<h1>Contact us</h1>';
+            }
+        ?>
+    </header>
 
-    <!-- fOOD sEARCH Section Starts Here -->
-    <section class="food-search text-center">
-        <div class="container">
-            
-            <form action="food-search.html" method="POST">
-                <input type="search" name="search" placeholder="Search for Food.." required>
-                <input type="submit" name="submit" value="Search" class="btn btn-primary">
-            </form>
+    <div id="form">
 
-        </div>
-    </section>
-    <!-- fOOD sEARCH Section Ends Here -->
 
-    <!-- CAtegories Section Starts Here -->
-    <section class="categories">
-        <div class="container">
-            <h2 class="text-center">Các loại món</h2>
+    <form id="contactform" method="post">
 
-            <?php
-                selectAllCategoryHome();
-            ?>
-
-            <div class="clearfix"></div>
-        </div>
-    </section>
-    <!-- Categories Section Ends Here -->
-
-    <!-- fOOD MEnu Section Starts Here -->
-    <section class="food-menu">
-        <div class="container">
-            <h2 class="text-center">Danh sách tất cả các món</h2>
-
-            <?php 
-                selectAllFoodHome();
-            ?>
-
-            <div class="clearfix"></div>
+        <div class="formgroup" id="name-form">
+            <label for="name">Tên của bạn* </label>
+            <input type="text" id="name" name="name" required/>
         </div>
 
-        <p class="text-center">
-            <a href="categories.php">Đến trang thực đơn</a>
-        </p>
-    </section>
-    <!-- fOOD Menu Section Ends Here -->
+        <div class="formgroup" id="email-form">
+            <label for="email">Địa chỉ e-mail*</label>
+            <input type="email" id="email" name="email" required/>
+        </div>
+
+        <div class="formgroup" id="message-form">
+            <label for="message">Ý kiến đóng góp*</label>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <input name="submit" type="submit" value="Gửi ý kiến của bạn"/>  
+    </form>
+    </div>
 
     <!-- social Section Starts Here -->
     <section class="social">
@@ -147,6 +165,5 @@
         </div>
     </section>
     <!-- footer Section Ends Here -->
-
 </body>
 </html>

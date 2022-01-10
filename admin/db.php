@@ -49,7 +49,7 @@
             return array('code' => 2, 'error' => 'Sai mật khẩu'); 
         }
         else {
-            return array('code' => 0, 'error' => '', 'data' => $data, 'id_user' => $data['id']);
+            return array('code' => 0, 'error' => '', 'data' => $data);
         }
 	}
 
@@ -80,20 +80,20 @@
         }
 	}
 
-    function changepass($cfpass, $id) {
-        $hash = password_hash($cfpass, PASSWORD_BCRYPT);
-        $sql = "UPDATE user SET pass = ? WHERE id = ?";
-        $conn = open_database();
+    // function changeass($cfpass, $user) {
+    //     $hash = password_hash($cfpass, PASSWORD_BCRYPT);
+    //     $sql = "UPDATE account SET pass = ? WHERE username = ?";
+    //     $conn = open_database();
 
-        $stm = $conn->prepare($sql);
-        $stm->bind_param('ss',$hash, $id);
+    //     $stm = $conn->prepare($sql);
+    //     $stm->bind_param('ss',$hash , $user);
 
-        if(!$stm->execute()) {
-            return array('code' => 2, 'error' => 'Can not execute command.');
-        }
+    //     if(!$stm->execute()) {
+    //         return array('code' => 2, 'error' => 'Can not execute command.');
+    //     }
 
-        return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
-    }
+    //     return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
+    // }
 
     function register($email, $pass, $username, $phone, $address){
 
@@ -105,6 +105,21 @@
 
         $stm = $conn->prepare($sql);
         $stm->bind_param('sssss',$email, $hash, $username, $phone, $address);
+
+        if(!$stm->execute()){
+            return array('code' => 2, 'error' => 'Can not excute command');
+        }
+        return array('code' => 0,'error' => 'Success');
+    }
+
+    function updateAccount($user_id, $user_email, $user_name, $user_phone, $user_address){
+
+        $sql = 'UPDATE user SET email = ?, username = ?, phone_number = ?, user_address = ? WHERE id = ?';
+
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssssi',$user_email, $user_name, $user_phone, $user_address, $user_id);
 
         if(!$stm->execute()){
             return array('code' => 2, 'error' => 'Can not excute command');
@@ -124,7 +139,21 @@
             return array('code' => 2, 'error' => 'Can not excute command');
         }
         return array('code' => 0,'error' => 'Success');
-    }   
+    }
+
+    function updateCategory($id, $title, $featured){
+        $sql = 'UPDATE category SET title = ?, featured = ? WHERE id = ?';
+
+                $conn = open_database();
+
+                $stm = $conn->prepare($sql);
+                $stm->bind_param('sss',$title, $featured, $id);
+
+                if(!$stm->execute()){
+                    return array('code' => 2, 'error' => 'Can not excute command');
+                }
+                return array('code' => 0,'error' => 'Success');
+    }
 
     function selectAllCategory($user) {
         $sql = 'SELECT id, title, img_name, featured FROM category';
@@ -146,7 +175,7 @@
                                 </button>';
                                 echo '</form>';
                                 if($user == 'admin') {
-                                echo ' <button style="margin-right: 4px;" id="fix-icon" class="fix-icon" name="fix-icon" value="'. $row["id"] .'">
+                                echo ' <button style="margin-right: 4px;" id="fix-icon" class="fix-icon" name="fix-icon" value="'. $row["id"] .'" >
                                             <i class="fa fa-wrench"></i>
                                         </button>';
                                         echo '<form action="categories.php" method="POST">';
@@ -193,7 +222,22 @@
             return array('code' => 2, 'error' => 'Can not excute command');
         }
         return array('code' => 0,'error' => 'Success');
-    } 
+    }
+
+    function updateFood($id, $title, $description_food, $price) {
+        $sql = 'UPDATE food SET title = ?, description_food = ?, price = ? WHERE id = ?';
+
+
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssis',$title, $description_food, $price, $id);
+
+        if(!$stm->execute()){
+            return array('code' => 2, 'error' => 'Can not excute command');
+        }
+        return array('code' => 0,'error' => 'Success');
+    }
 
     function selectAllFood($user, $category_name) {
         $sql = 'SELECT id, title, img_food, description_food, price FROM food WHERE category_name = ?';
@@ -210,7 +254,7 @@
 
         if($result->num_rows >0){
             foreach($result as $row) {
-                echo '
+                echo '<form action="foods.php" method="post">
                 <div class="food-menu-box">
                     <div class="food-menu-img">
                         <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
@@ -224,21 +268,18 @@
                         </p>
                         <br>';
                         if($user != "admin") {
-                            echo '<form action="order.php" method="post">
-                                    <button value="'. $row["id"] .'" href="order.php" class="btn btn-primary" name="order-now">Đặt ngay</button>
-                                </form>';
+                            echo '<a value="'. $row["id"] .'" href="order.php" class="btn btn-primary">Đặt ngay</a>';
                         }
                 echo '   </div>';
                 if($user == "admin") {
-                    echo '<form action="foods.php" method="post">
-                        <div class="btn-list">
-                        <button value="'. $row["id"] .'" type="submit" style="margin-right: 4px;" id="fix-food-icon" class="fix-food-icon" name="fix-food-icon" >
-                            <i class="fa fa-wrench"></i>
-                        </button>
-                        <button value="'. $row["id"] .'" type="submit" class="delete-food-icon" name="delete-food-icon" >
-                            <i class="fa fa-trash"></i> 
-                        </button>
-                    </div>';
+                    echo '<div class="btn-list">
+                    <button value="'. $row["id"] .'" type="button" style="margin-right: 4px;" id="fix-food-icon" class="fix-food-icon" name="fix-food-icon" >
+                        <i class="fa fa-wrench"></i>
+                    </button>
+                    <button value="'. $row["id"] .'" type="submit" class="delete-food-icon" name="delete-food-icon" >
+                        <i class="fa fa-trash"></i> 
+                    </button>
+                </div>';
                 }   
                     
             echo '</div>
@@ -257,23 +298,21 @@
 
         if($result->num_rows >0){
             foreach($result as $row) {
-                echo '<form action="order.php" method="post">
-                        <div class="food-menu-box">
-                                <div class="food-menu-img">
-                                    <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
-                                </div>
+                echo '<div class="food-menu-box">
+                        <div class="food-menu-img">
+                            <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
+                        </div>
 
-                                <div class="food-menu-desc">
-                                    <h4>'.$row['title'].'</h4>
-                                    <p class="food-price">'.$row['price'].' VND</p>
-                                    <p class="food-detail">
-                                        '.$row['description_food'].'
-                                    </p>
-                                    <br>
-                                    <button type="submit" href="order.php" class="btn btn-primary" value="'. $row["id"] .'" name="order-now">Đặt ngay</button>                              
-                                </div>
-                            </div>
-                    </form>';
+                        <div class="food-menu-desc">
+                            <h4>'.$row['title'].'</h4>
+                            <p class="food-price">'.$row['price'].' VND</p>
+                            <p class="food-detail">
+                                '.$row['description_food'].'
+                            </p>
+                            <br>
+                            <a href="order.php" class="btn btn-primary" value="'. $row["id"] .'">Đặt ngay</a>
+                        </div>
+                    </div>';
             }
         }
         $conn->close();
@@ -294,12 +333,12 @@
                             <div class="info_user"><span style="font-weight:bold">Tên:</span> '.$row['username'].'</div>
                             <div class="info_user"><span style="font-weight:bold">Email:</span> '.$row['email'].'</div>
                             <div class="info_user"> <span style="font-weight:bold">Số điện thoại:</span> '.$row['phone_number'].'</div>
-                            <div class="info_user"> <span style="font-weight:bold">Địa chỉ:</span> '.$row['phone_number'].'</div>
+                            <div class="info_user"> <span style="font-weight:bold">Địa chỉ:</span> '.$row['user_address'].'</div>
                         </div>';
                 
                     echo  '<form method="post" action="account.php">
                                 <div class="btn_container">
-                                    <button value="'. $row["id"] .'" class="btn-fix-user" name="btn-fix-user">
+                                    <button value="'. $row["id"] .'" class="btn-fix-user" name="btn-fix-user" type="button">
                                         <i class="fa fa-wrench"></i>
                                     </button>
                                     <button value="'. $row["id"] .'" class="btn-delete-user" name="btn-delete-user">
@@ -314,19 +353,34 @@
         $conn->close();
     }
 
+    function changepass($cfpass, $id) {
+            $hash = password_hash($cfpass, PASSWORD_BCRYPT);
+            $sql = "UPDATE user SET pass = ? WHERE id = ?";
+            $conn = open_database();
+
+            $stm = $conn->prepare($sql);
+            $stm->bind_param('ss',$hash, $id);
+
+            if(!$stm->execute()) {
+                return array('code' => 2, 'error' => 'Can not execute command.');
+            }
+
+            return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
+    }
+
     function createFoodOder($food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price) {
-        $sql = 'INSERT INTO food_order (food_name, img_food, quantity, username, phone_number, email, user_address, total_price)
-                VALUE (?, ?, ?, ?, ?, ?, ?, ?)';
+            $sql = 'INSERT INTO food_order (food_name, img_food, quantity, username, phone_number, email, user_address, total_price)
+                    VALUE (?, ?, ?, ?, ?, ?, ?, ?)';
 
-        $conn = open_database();
+            $conn = open_database();
 
-        $stm = $conn->prepare($sql);
-        $stm->bind_param('ssissssi', $food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price);
+            $stm = $conn->prepare($sql);
+            $stm->bind_param('ssissssi', $food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price);
 
-        if(!$stm->execute()){
-            return array('code' => 2, 'error' => 'Can not excute command');
-        }
-        return array('code' => 0,'error' => 'Success');
+            if(!$stm->execute()){
+                return array('code' => 2, 'error' => 'Can not excute command');
+            }
+            return array('code' => 0,'error' => 'Success');
     }
 
     function addContact($username, $useremail, $contributions) {
@@ -341,5 +395,4 @@
             return array('code' => 2, 'error' => 'Can not excute command');
         }
         return array('code' => 0,'error' => 'Success');
-    } 
-?>  
+    }

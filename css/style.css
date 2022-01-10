@@ -321,9 +321,11 @@ fieldset{
 }
 
 /* CSS categories */
+/* CSS categories */
 .add-category-food,
-.add-food,
-.add-user-account {
+.add-food, .edit-food,
+.add-user-account, .edit-user-account,
+.edit-category-food{
     position: fixed;
     top: 0;
     left: 0;
@@ -335,9 +337,9 @@ fieldset{
     align-items: center;
 }
 
-.add-category-food .add-category-food-form,
-.add-food .add-food-form,
-.add-user-account .add-user-form {
+.add-category-food .add-category-food-form,.edit-category-food .edit-category-food-form,
+.add-food .add-food-form, .edit-food .edit-food-form,
+.add-user-account .add-user-form, .edit-user-account .edit-user-form {
     width: 600px;
     height: auto;
     background-color:#fff;
@@ -347,18 +349,18 @@ fieldset{
     animation: modalSlipDown linear 0.3s;
 }
 
-.add-category-food .exit-icon,
-.add-food .exit-icon,
-.add-user-account .exit-icon {
+.add-category-food .exit-icon, .edit-category-food .exit-icon,
+.add-food .exit-icon,.edit-food .exit-icon,
+.add-user-account .exit-icon ,.edit-user-account .exit-icon{
     position: absolute;
     right: 8px;
     top: 6px;
     font-size: 30px;
 }
 
-.add-category-food .exit-icon:hover,
-.add-food .exit-icon:hover,
-.add-user-account .exit-icon:hover {
+.add-category-food .exit-icon:hover, .edit-category-food .exit-icon:hover,
+.add-food .exit-icon:hover,.edit-food .exit-icon:hover,
+.add-user-account .exit-icon:hover, .edit-user-account .exit-icon:hover {
     cursor: pointer;
     opacity: 0.7;
 }
@@ -366,17 +368,31 @@ fieldset{
 .add-category-food .categoryfood_name,
 .add-category-food .categoryfood_picture,
 .add-category-food .categoryfood_decription,
+.edit-category-food .categoryfood_name,
+.edit-category-food .categoryfood_picture,
+.edit-category-food .categoryfood_decription,
 .add-food .food_name,
 .add-food .food_picture,
 .add-food .food_decription,
 .add-food .food_price,
 .add-food .food_category,
+.edit-food .food_name,
+.edit-food .food_picture,
+.edit-food .food_decription,
+.edit-food .food_price,
+.edit-food .food_category,
 .add-user-account .user_name,
 .add-user-account .user_email,
 .add-user-account .user_pass,
 .add-user-account .user_cfpass,
 .add-user-account .user_phone,
-.add-user-account .user_address {
+.add-user-account .user_address,
+.edit-user-account .user_name,
+.edit-user-account .user_email,
+.edit-user-account .user_pass,
+.edit-user-account .user_cfpass,
+.edit-user-account .user_phone,
+.edit-user-account .user_address {
     display: block;
     margin-bottom: 16px;
     margin-top: 6px;
@@ -386,29 +402,44 @@ fieldset{
 
 .add-category-food .categoryfood_name,
 .add-category-food .categoryfood_decription,
+.edit-category-food .categoryfood_name,
+.edit-category-food .categoryfood_decription,
 .add-food .food_name,
 .add-food .food_decription,
 .add-food .food_price,
 .add-food .food_category,
+.edit-food .food_name,
+.edit-food .food_decription,
+.edit-food .food_price,
+.edit-food .food_category,
 .add-user-account .user_name,
 .add-user-account .user_email,
 .add-user-account .user_pass,
 .add-user-account .user_cfpass,
 .add-user-account .user_phone,
-.add-user-account .user_address {
+.add-user-account .user_address,
+.edit-user-account .user_name,
+.edit-user-account .user_email,
+.edit-user-account .user_pass,
+.edit-user-account .user_cfpass,
+.edit-user-account .user_phone,
+.edit-user-account .user_address {
     border-radius: 15px;
     padding-left: 15px;
     border: 1px solid #ccc;
 } 
 
 .add-category-food .categoryfood_decription,
-.add-food .food_decription {
+.edit-category-food .categoryfood_decription,
+.add-food .food_decription,.edit-food .food_decription {
     height: 60px;
 }
 
 .add-category-food .btn-submit-categoty,
-.add-food .btn-submit-food,
-.add-user-account .btn-submit-user {
+.edit-category-food .btn-submit-categoty,
+.add-food .btn-submit-food,.edit-food .btn-submit-food,
+.add-user-account .btn-submit-user,
+.edit-user-account .btn-submit-user {
     border: none;
     width: 100px;
     height: 50px;
@@ -421,8 +452,11 @@ fieldset{
 }
 
 .add-category-food .btn-submit-categoty:hover,
+.edit-category-food .btn-submit-categoty:hover,
 .add-food .btn-submit-food:hover,
-.add-user-account .btn-submit-user:hover {
+.edit-food .btn-submit-food:hover,
+.add-user-account .btn-submit-user:hover,
+.edit-user-account .btn-submit-user:hover {
     opacity: 0.7;
     cursor: pointer;
 }
@@ -440,6 +474,31 @@ fieldset{
 
 .open { 
     display: flex;
+}
+
+.labelButton {
+    display:inline-block;
+    color: black;
+    border:1px solid #7d7d7d;
+    background:#EFEFEF;
+    cursor:pointer;
+    vertical-align:middle;
+    padding: 1px 6px;
+    margin: 0 4px 0 0 ;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 2px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.labelButton:hover {
+    border:1px solid #4F4F4F;
+    background:#E5E5E5;
+
+}
+#labelButton:active {
+    border:1px solid #989898;
+    background: #f3f3f3;
+
 }
 
 /* CSS account.php */
@@ -481,3 +540,90 @@ fieldset{
     border-radius: 20px;
 }
 /* End CSS account.php */
+
+/* CSS Changepass.php */
+
+.mainDiv {
+    display: flex;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+    font-family: 'Open Sans', sans-serif;
+  }
+ .cardStyle {
+    width: 500px;
+    border-color: white;
+    background: #fff;
+    padding: 36px 0;
+    border-radius: 4px;
+    margin: 30px 0;
+    box-shadow: 0px 0 2px 0 rgba(0,0,0,0.25);
+  }
+#signupLogo {
+  max-height: 100px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+.formTitle{
+  font-weight: 600;
+  margin-top: 20px;
+  color: #2F2D3B;
+  text-align: center;
+}
+.inputLabel {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 6px;
+  margin-top: 24px;
+}
+  .inputDiv {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+input {
+  height: 40px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  border: solid 1px #ccc;
+  padding: 0 11px;
+}
+input:disabled {
+  cursor: not-allowed;
+  border: solid 1px #eee;
+}
+.buttonWrapper {
+  margin-top: 40px;
+}
+.submitButton {
+width: 70%;
+height: 40px;
+margin: auto;
+display: block;
+color: #fff;
+background-color: #065492;
+border-color: #065492;
+text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+box-shadow: 0 2px 0 rgba(0, 0, 0, 0.035);
+border-radius: 4px;
+font-size: 14px;
+cursor: pointer;
+}
+
+.submitButton:hover {
+    opacity: 0.8;
+}
+
+.inputDiv .error {
+    background-color: rgb(230, 126, 126);
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* End CSS Changepass.php */
