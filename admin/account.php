@@ -128,6 +128,9 @@
                                     <a href="#">Quản lý tài khoản</a>
                                 </li>
                                 <li>
+                                    <a href="./contact_manager.php">Quản lý phản hồi</a>
+                                </li>
+                                <li>
                                     <a  href="../changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
@@ -171,17 +174,7 @@
 
     <section class="social">    
         <div class="container text-center">
-            <ul>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/50/000000/facebook-new.png"/></a>
-                </li>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/instagram-new.png"/></a>
-                </li>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/twitter.png"/></a>
-                </li>
-            </ul>
+            
         </div>
     </section>
     <!-- social Section Ends Here -->
@@ -254,7 +247,6 @@
        const add_user_account = $('.add-user-account');
        const add_user_form = $('.add-user-form');
        const edit_user_account = $('.edit-user-account');
-       const edit_user_form = $('.edit-user-form');
        const exit_icon = $('.exit-icon');
        const fix_icon = $('.btn-fix-user');
 
@@ -275,13 +267,17 @@
             console.log('clicked');
        })
 
-//       edit_user_account.on('click', function() {
-//             edit_user_account.toggleClass('open');
-//        })
-//
-//        edit_user_form.on('click', function(event) {
-//            event.stopPropagation();
-//        })
+       $(document).on("click", '.edit-user-account', function() {
+            $('.edit-user-account').removeClass('open');
+        });
+
+      $(document).on("click", '.edit-user-form', function(event) {
+            event.stopPropagation();
+      });
+
+      $(document).on("click", '.exitIconEditUser', function(event) {
+            $('.edit-user-account').removeClass('open');
+      });
 
        fix_icon.on('click', function() {
         var id = this.value;
@@ -292,7 +288,6 @@
                 myRequest.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("edit-user-account").innerHTML = this.responseText;
-                        console.log(this.responseText);
                     }
                 };
                 myRequest.open("GET","fix-account.php?id="+id,true);

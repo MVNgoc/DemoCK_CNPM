@@ -20,7 +20,7 @@
             $data = $result->fetch_assoc();
             echo '
                      <form action="" method="POST" class="edit-user-form" enctype="multipart/form-data">
-                         <i class="fa fa-close exit-icon"></i>
+                         <i class="fa fa-close exit-icon exitIconEditUser"></i>
                          <div class="input-form">
                              <label class="user_lable" for="user_name">Họ và tên:</label>
                              <input required="" type="text" class="user_name" name="user_name" placeholder="'.$data["username"].'" value="'.$data["username"].'">

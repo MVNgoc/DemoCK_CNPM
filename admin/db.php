@@ -298,7 +298,8 @@
 
         if($result->num_rows >0){
             foreach($result as $row) {
-                echo '<div class="food-menu-box">
+                echo '<form action="order.php" method="post">
+                    <div class="food-menu-box">
                         <div class="food-menu-img">
                             <img src="images/'.$row['img_food'].'" alt="" class="img-responsive img-curve">
                         </div>
@@ -310,9 +311,10 @@
                                 '.$row['description_food'].'
                             </p>
                             <br>
-                            <a href="order.php" class="btn btn-primary" value="'. $row["id"] .'">Đặt ngay</a>
+                            <button name="order-now" class="btn btn-primary" value="'. $row["id"] .'">Đặt ngay</button>
                         </div>
-                    </div>';
+                    </div>
+                    </form>';
             }
         }
         $conn->close();
@@ -354,33 +356,33 @@
     }
 
     function changepass($cfpass, $id) {
-            $hash = password_hash($cfpass, PASSWORD_BCRYPT);
-            $sql = "UPDATE user SET pass = ? WHERE id = ?";
-            $conn = open_database();
+        $hash = password_hash($cfpass, PASSWORD_BCRYPT);
+        $sql = "UPDATE user SET pass = ? WHERE id = ?";
+        $conn = open_database();
 
-            $stm = $conn->prepare($sql);
-            $stm->bind_param('ss',$hash, $id);
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss',$hash, $id);
 
-            if(!$stm->execute()) {
-                return array('code' => 2, 'error' => 'Can not execute command.');
-            }
+        if(!$stm->execute()) {
+            return array('code' => 2, 'error' => 'Can not execute command.');
+        }
 
-            return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
+        return array('code' => 0, 'error' => 'Thay đổi mật khẩu thành công!.');
     }
 
     function createFoodOder($food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price) {
-            $sql = 'INSERT INTO food_order (food_name, img_food, quantity, username, phone_number, email, user_address, total_price)
-                    VALUE (?, ?, ?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO food_order (food_name, img_food, quantity, username, phone_number, email, user_address, total_price)
+                VALUE (?, ?, ?, ?, ?, ?, ?, ?)';
 
-            $conn = open_database();
+        $conn = open_database();
 
-            $stm = $conn->prepare($sql);
-            $stm->bind_param('ssissssi', $food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price);
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssissssi', $food_name, $img_food, $quantity, $username, $phone_number, $email, $user_address, $total_price);
 
-            if(!$stm->execute()){
-                return array('code' => 2, 'error' => 'Can not excute command');
-            }
-            return array('code' => 0,'error' => 'Success');
+        if(!$stm->execute()){
+            return array('code' => 2, 'error' => 'Can not excute command');
+        }
+        return array('code' => 0,'error' => 'Success');
     }
 
     function addContact($username, $useremail, $contributions) {
@@ -395,4 +397,37 @@
             return array('code' => 2, 'error' => 'Can not excute command');
         }
         return array('code' => 0,'error' => 'Success');
+    }
+
+    function selectAllContact() {
+        $sql = 'SELECT id, username, useremail, contributions FROM contact';
+
+        $conn = open_database();
+        
+        $result = $conn-> query($sql);
+        $stt = 1;
+        if($result->num_rows >0){
+            foreach($result as $row) {
+                echo '<div class="user_card contact_card">
+                        <div class="infor_container">
+                            <div class="info_user"><span style="font-weight:bold">'.$stt.'</span></div>
+                            <div class="info_user"><span style="font-weight:bold">Tên:</span> '.$row['username'].'</div>
+                            <div class="info_user"><span style="font-weight:bold">Email:</span> '.$row['useremail'].'</div>
+                        </div>';
+                
+                    echo  '<form method="post" action="contact_manager.php">
+                                <div class="btn_container">
+                                    <button value="'. $row["id"] .'" class="btn-view-contact" name="btn-view-contact" type="button">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button value="'. $row["id"] .'" class="btn-delete-contact" name="btn-delete-contact" type="submit">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>  
+                            </div>
+                        </form>';            
+                $stt++;
+            }
+        }
+        $conn->close();
     }

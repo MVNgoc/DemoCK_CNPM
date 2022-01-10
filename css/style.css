@@ -324,8 +324,10 @@ fieldset{
 /* CSS categories */
 .add-category-food,
 .add-food, .edit-food,
-.add-user-account, .edit-user-account,
-.edit-category-food{
+.add-user-account, 
+.edit-user-account,
+.edit-category-food,
+.view-contact-user {
     position: fixed;
     top: 0;
     left: 0;
@@ -337,9 +339,13 @@ fieldset{
     align-items: center;
 }
 
-.add-category-food .add-category-food-form,.edit-category-food .edit-category-food-form,
-.add-food .add-food-form, .edit-food .edit-food-form,
-.add-user-account .add-user-form, .edit-user-account .edit-user-form {
+.add-category-food .add-category-food-form,
+.edit-category-food .edit-category-food-form,
+.add-food .add-food-form, 
+.edit-food .edit-food-form,
+.add-user-account .add-user-form, 
+.edit-user-account .edit-user-form,
+.view-contact-user .view-contact-user-form {
     width: 600px;
     height: auto;
     background-color:#fff;
@@ -349,18 +355,26 @@ fieldset{
     animation: modalSlipDown linear 0.3s;
 }
 
-.add-category-food .exit-icon, .edit-category-food .exit-icon,
-.add-food .exit-icon,.edit-food .exit-icon,
-.add-user-account .exit-icon ,.edit-user-account .exit-icon{
+.add-category-food .exit-icon, 
+.edit-category-food .exit-icon,
+.add-food .exit-icon,
+.edit-food .exit-icon,
+.add-user-account .exit-icon ,
+.edit-user-account .exit-icon,
+.view-contact-user .exit-icon {
     position: absolute;
     right: 8px;
     top: 6px;
     font-size: 30px;
 }
 
-.add-category-food .exit-icon:hover, .edit-category-food .exit-icon:hover,
-.add-food .exit-icon:hover,.edit-food .exit-icon:hover,
-.add-user-account .exit-icon:hover, .edit-user-account .exit-icon:hover {
+.add-category-food .exit-icon:hover, 
+.edit-category-food .exit-icon:hover,
+.add-food .exit-icon:hover,
+.edit-food .exit-icon:hover,
+.add-user-account .exit-icon:hover, 
+.edit-user-account .exit-icon:hover,
+.view-contact-user .exit-icon:hover {
     cursor: pointer;
     opacity: 0.7;
 }
@@ -523,7 +537,9 @@ fieldset{
 }
 
 .user_card .btn-fix-user,
-.user_card .btn-delete-user {
+.user_card .btn-delete-user,
+.user_card .btn-view-contact,
+.user_card .btn-delete-contact {
     font-size: 24px;
     padding: 4px;
     margin-left: 6px;
@@ -531,7 +547,9 @@ fieldset{
 }
 
 .user_card .btn-fix-user:hover,
-.user_card .btn-delete-user:hover {
+.user_card .btn-delete-user:hover,
+.user_card .btn-view-contact:hover,
+.user_card .btn-delete-contact:hover {
     cursor: pointer;
     opacity: 0.6;
 }
@@ -627,3 +645,28 @@ cursor: pointer;
 }
 
 /* End CSS Changepass.php */
+
+/* CSS contact_manager.php */
+
+.contact_card {
+    margin-left: auto;
+    width: 700px;
+    margin-right: auto;
+}
+
+.view-contact-user .view-contact-user-form  {
+    align-items: center;
+    height: 300px;
+    display: flex;
+    width: 480px;
+}
+
+.view-contact-user .view-contact-user-form .user_lable {
+    display: block;
+    padding-bottom: 5px;
+}
+
+.view-contact-user .view-contact-user-form .form-group {
+    padding: 15px;
+}
+/* End CSS contact_manager.php */

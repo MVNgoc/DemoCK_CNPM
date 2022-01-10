@@ -58,13 +58,13 @@
         {
             $profileImageName = time() . '_' . $_FILES['categoryfood_picture']['name'];
 
-                $targer = 'images/' . $profileImageName;
-                if(move_uploaded_file($_FILES['categoryfood_picture']['tmp_name'], $targer)) {
-                    $sql = "UPDATE category SET img_name = '$profileImageName' WHERE id =  $categoryfood_id ";
-                    $conn = open_database();
-                    $stm = $conn->prepare($sql);
-                    $stm->execute();
-                }
+            $targer = 'images/' . $profileImageName;
+            if(move_uploaded_file($_FILES['categoryfood_picture']['tmp_name'], $targer)) {
+                $sql = "UPDATE category SET img_name = '$profileImageName' WHERE id =  $categoryfood_id ";
+                $conn = open_database();
+                $stm = $conn->prepare($sql);
+                $stm->execute();
+            }
 
         }
     }
@@ -142,6 +142,9 @@
                                     <a href="./admin/account.php">Quản lý tài khoản</a>
                                 </li>
                                 <li>
+                                    <a href="./admin/contact_manager.php">Quản lý phản hồi</a>
+                                </li>
+                                <li>
                                     <a  href="changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
@@ -203,17 +206,7 @@
     <!-- social Section Starts Here -->
     <section class="social">
         <div class="container text-center">
-            <ul>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/50/000000/facebook-new.png"/></a>
-                </li>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/instagram-new.png"/></a>
-                </li>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/twitter.png"/></a>
-                </li>
-            </ul>
+            
         </div>
     </section>
     <!-- social Section Ends Here -->
@@ -284,10 +277,7 @@
        const exit_category_food = $('.exit-category-food');
 
        const edit_category_food = $('.edit-category-food');
-       const edit_category_food_form = $('.edit-category-food-form');
-       const exit_icon_edit = $('.exitIconEdit');
        const fix_icon = $('.fix-icon');
-       const inputImg = $('.categoryfood_picture');
 
        //add
        add_btn.on('click', function() {
@@ -304,41 +294,39 @@
 
        exit_category_food.on('click', function() {
             //add_category_food.removeClass('open');
-            add_category_food.toggleClass('open');
+            add_category_food.removeClass('open');
        })
 
        //edit
-    //    edit_category_food.on('click', function() {
-    //         edit_category_food.toggleClass('open');
-    //    })
+       $(document).on("click", '.exitIconEdit', function(event) {
+          $('.edit-category-food').removeClass('open');
+      });
 
-       edit_category_food_form.on('click', function(event) {
-            event.stopPropagation();
-       })
+      $(document).on("click", '.edit-category-food-form', function(event) {
+          event.stopPropagation();
+      });
 
-       exit_icon_edit.on('click', function() {
-            edit_category_food.toggleClass('open');
-            console.log('clicked');
-       })
-       
+      $(document).on("click", '.edit-category-food', function() {
+          $('.edit-category-food').toggleClass('open');
+      });
+
        fix_icon.on('click', function() {
             var id = this.value;
-                if(id==""){
-       				document.getElementById("edit-category-food").innerHTML = "";
-       			}else{
-       				var myRequest = new XMLHttpRequest();
-       				myRequest.onreadystatechange = function() {
-       					if (this.readyState == 4 && this.status == 200) {
-       						document.getElementById("edit-category-food").innerHTML = this.responseText;
-        					}
-       				};
-                    myRequest.open("GET","./admin/fix-category.php?id="+id,true);
-       				myRequest.send();
-                    edit_category_food.toggleClass('open');
-       			}
+            if(id==""){
+                document.getElementById("edit-category-food").innerHTML = "";
+            }else{
+                var myRequest = new XMLHttpRequest();
+                myRequest.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("edit-category-food").innerHTML = this.responseText;
+                    }
+                };
+                myRequest.open("GET","./admin/fix-category.php?id="+id,true);
+                myRequest.send();
+                edit_category_food.toggleClass('open');
+            }
         })
 
     })
-
 </script>
 </html>

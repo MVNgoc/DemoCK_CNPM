@@ -110,6 +110,9 @@
                                     <a href="./admin/account.php">Quản lý tài khoản</a>
                                 </li>
                                 <li>
+                                    <a href="./admin/contact_manager.php">Quản lý phản hồi</a>
+                                </li>
+                                <li>
                                     <a  href="changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>

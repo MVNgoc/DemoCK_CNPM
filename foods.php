@@ -150,6 +150,9 @@
                                     <a href="./admin/account.php">Quản lý tài khoản</a>
                                 </li>
                                 <li>
+                                    <a href="./admin/contact_manager.php">Quản lý phản hồi</a>
+                                </li>
+                                <li>
                                     <a  href="changepass.php">Đổi mật khẩu</a>
                                 </li>
                                 <li>
@@ -278,17 +281,7 @@
     <!-- social Section Starts Here -->
     <section class="social">
         <div class="container text-center">
-            <ul>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/50/000000/facebook-new.png"/></a>
-                </li>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/instagram-new.png"/></a>
-                </li>
-                <li>
-                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/twitter.png"/></a>
-                </li>
-            </ul>
+            
         </div>
     </section>
     <!-- social Section Ends Here -->
@@ -308,11 +301,11 @@
        const add_food = $('.add-food');
        const edit_food = $('.edit-food');
        const add_food_form = $('.add-food-form');
-       const edit_food_form = $('.add-food-form');
-       const exit_icon = $('.exit-icon');
-       const fix_icon = $('.fix-icon');
+        const exit_icon = $('.exit-icon');
+
         const fix_food_icon = $('.fix-food-icon');
 
+        //add
        add_btn.on('click', function() {
             add_food.addClass('open');
        })
@@ -321,26 +314,28 @@
             add_food.removeClass('open');
        })
 
-       edit_food.on('click', function() {
-            edit_food.removeClass('open');
-       })
-
        add_food_form.on('click', function(event) {
-           event.stopPropagation();
-       })
-
-       edit_food_form.on('click', function(event) {
            event.stopPropagation();
        })
 
        exit_icon.on('click', function() {
             add_food.removeClass('open');
-            edit_food.removeClass('open');
        })
+
+        $(document).on("click", '.edit-food', function() {
+            $('.edit-food').removeClass('open');
+        });
+
+      $(document).on("click", '.edit-food-form', function(event) {
+            event.stopPropagation();
+      });
+
+      $(document).on("click", '.exit-icon', function(event) {
+            $('.edit-food').removeClass('open');
+      });
 
        fix_food_icon.on('click', function(event) {
            var id = this.value;
-           console.log(this.value);
             if(id==""){
                 document.getElementById("edit-food").innerHTML = "";
             }else{
@@ -348,7 +343,6 @@
                 myRequest.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("edit-food").innerHTML = this.responseText;
-                        console.log(this.responseText);
                     }
                 };
                 myRequest.open("GET","./admin/fix-food.php?id="+id,true);
